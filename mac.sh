@@ -2,7 +2,10 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # added by Anaconda3 2.3.0 installer
-export PATH="/Users/wgillis/anaconda/bin:$PATH:~/pyrun:~/pyimport:~/Documents/MATLAB/birds/py"
+if [ -d ~/pyrun ]
+then
+	export PATH="$PATH:~/pyrun:~/pyimport:~/Documents/MATLAB/birds/py"
+fi
 
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 export pybirds="/Users/wgillis/Documents/MATLAB/birds/py"
