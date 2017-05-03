@@ -1,0 +1,28 @@
+#!/bin/bash
+
+node="orchestra"
+X11=""
+forward=""
+sshcmd=".med.harvard.edu"
+
+while getopts 'Xfn:' flag; do
+	case "${flag}" in 
+		n) node="${OPTARG}" ;;
+		X) X11=true ;;
+		f) forward=true ;;
+		*) echo "Unexpected flag ${flag}" ;;
+	esac
+done
+
+sshcmd="wg41@${node}${sshcmd}"
+if [ $X11 ]
+then
+	sshcmd="-Y ${sshcmd}"
+fi
+
+if [ $forward ]
+then
+	sshcmd="-L 8989:localhost:8989 ${sshcmd}"
+fi
+
+eval "ssh $sshcmd"
