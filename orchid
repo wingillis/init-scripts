@@ -21,6 +21,12 @@ while getopts 'hXfn:' flag; do
 	esac
 done
 
+if [ $showhelp ]
+then
+	echo "${helptxt}"
+	exit 0
+fi
+
 sshcmd="wg41@${node}${sshcmd}"
 if [ $X11 ]
 then
