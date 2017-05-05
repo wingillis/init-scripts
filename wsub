@@ -1,0 +1,51 @@
+#!/bin/bash
+
+mem=""
+queue="interactive"
+transfer=""
+debug=""
+procs="2"
+com="bash"
+wall=""
+
+while getopts "w:n:sc:m:idq:t" flag; do
+    case "${flag}" in 
+        m) mem="$(echo "${OPTARG} * 1000" | bc -l )" ;; # how much memory in gb
+        i) queue="interactive" ;;
+        w) wall="${OPTARG}" ;;
+        n) procs="${OPTARG}" ;;
+        d) debug=true ;;
+        s) queue="short" ;;
+        c) com="${OPTARG}" ;; # the command to send to 
+        t) transfer=true ;;
+        q) queue="${OPTARG}" ;;
+        *) echo "not a valid arg" ;;
+    esac
+done
+
+BSUB_COMMAND="bsub -n ${procs} -q ${queue}"
+
+if [ $transfer ]
+then
+    BSUB_COMMAND="$BSUB_COMMAND -R \"select[transfer]\""
+fi
+
+if [ $mem ]
+then
+    BSUB_COMMAND="${BSUB_COMMAND} -R \"rusage[mem=${mem}]\""
+fi
+
+if [ $wall ]
+then
+    BSUB_COMMAND="${BSUB_COMMAND} -W $wall"
+fi
+
+# add the command to the end of the bsub string
+BSUB_COMMAND="${BSUB_COMMAND} ${com}"
+
+if [ $debug ]
+then
+    echo "${BSUB_COMMAND}"
+else
+    eval ${BSUB_COMMAND}
+fi
