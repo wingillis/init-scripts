@@ -9,7 +9,7 @@ fi
 
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 export pybirds="/Users/wgillis/Documents/MATLAB/birds/py"
-alias matlab="/Applications/MATLAB_R2016b.app/bin/matlab"
+alias matlab="/Applications/MATLAB_R201[67][ab].app/bin/matlab"
 alias matterm="matlab -nodesktop -nosplash"
 
 echo "Welcome Winthrop"

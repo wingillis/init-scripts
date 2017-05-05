@@ -8,8 +8,26 @@ procs="2"
 com="bash"
 wall=""
 output=""
+disphelp=""
+thehelp="
+wsub Help - options that you can pass:
+-m: option - memory
+-i: flag - interactive mode (default)
+-w: option - wall time
+-n: option - num procs
+-o: option - specify output file
+-d: flag - set debug true to print command
+-s: flag - set queue to short
+-c: option - code to run on bsub - don't forget quotes when using spaces!!! - default is bash
+-t: flag - adds transfer node
+-q: option - specify which queue you want to run in
+-h: flag - print help (this)
 
-while getopts "w:n:sc:m:idq:to:" flag; do
+example:
+	wsub -t -n 2 -m 3
+"
+
+while getopts "w:n:sc:m:idq:to:h" flag; do
     case "${flag}" in 
         m) mem="$(echo "${OPTARG} * 1000" | bc -l )" ;; # how much memory in gb
         i) queue="interactive" ;;
@@ -21,9 +39,16 @@ while getopts "w:n:sc:m:idq:to:" flag; do
         c) com="${OPTARG}" ;; # the command to send to 
         t) transfer=true ;;
         q) queue="${OPTARG}" ;;
+				h) disphelp=true ;;
         *) echo "not a valid arg" ;;
     esac
 done
+
+if [ $disphelp ]
+then
+	echo "${thehelp}"
+	exit 0
+fi
 
 BSUB_COMMAND="bsub -n ${procs} -q ${queue}"
 
