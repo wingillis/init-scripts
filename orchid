@@ -11,7 +11,7 @@ helptxt="
 -f: port forward to localhost:8989
 "
 
-while getopts 'Xfn:' flag; do
+while getopts 'hXfn:' flag; do
 	case "${flag}" in
 		n) node="${OPTARG}" ;;
 		X) X11=true ;;
