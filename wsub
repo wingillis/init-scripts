@@ -7,14 +7,16 @@ debug=""
 procs="2"
 com="bash"
 wall=""
+output=""
 
-while getopts "w:n:sc:m:idq:t" flag; do
+while getopts "w:n:sc:m:idq:to:" flag; do
     case "${flag}" in 
         m) mem="$(echo "${OPTARG} * 1000" | bc -l )" ;; # how much memory in gb
         i) queue="interactive" ;;
         w) wall="${OPTARG}" ;;
         n) procs="${OPTARG}" ;;
         d) debug=true ;;
+        o) output="${OPTARG}" ;; # an output file
         s) queue="short" ;;
         c) com="${OPTARG}" ;; # the command to send to 
         t) transfer=true ;;
@@ -40,8 +42,13 @@ then
     BSUB_COMMAND="${BSUB_COMMAND} -W $wall"
 fi
 
+if [ $output ]
+then
+  BSUB_COMMAND="${BSUB_COMMAND} -N -o ${output}"
+fi
+
 # add the command to the end of the bsub string
-BSUB_COMMAND="${BSUB_COMMAND} ${com}"
+BSUB_COMMAND="${BSUB_COMMAND} \"${com}\""
 
 if [ $debug ]
 then
