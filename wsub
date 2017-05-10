@@ -6,7 +6,7 @@ transfer=""
 debug=""
 procs="2"
 com="bash"
-wall=""
+wall="12:00"
 output=""
 disphelp=""
 thehelp="
@@ -39,7 +39,7 @@ while getopts "w:n:sc:m:idq:to:h" flag; do
         c) com="${OPTARG}" ;; # the command to send to 
         t) transfer=true ;;
         q) queue="${OPTARG}" ;;
-				h) disphelp=true ;;
+	h) disphelp=true ;;
         *) echo "not a valid arg" ;;
     esac
 done

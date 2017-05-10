@@ -1,0 +1,16 @@
+#!/bin/bash
+
+node="clarinet"
+number="001-062"
+port="8989"
+
+while getopts "n:o:p:" flag; do
+  case "${flag}" in
+    n) node="${OPTARG}" ;;
+    o) number="${OPTARG}" ;;
+    p) port="${OPTARG}" ;;
+    *) echo "don't understand" ;;
+  esac
+done
+
+ssh -L ${port}:localhost:${port} ${node}${number}.orchestra
