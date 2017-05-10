@@ -4,15 +4,28 @@ node="orchestra"
 X11=""
 forward=""
 sshcmd=".med.harvard.edu"
+showhelp=""
+helptxt="
+-n: which orchestra node
+-X: X11 forwarding
+-f: port forward to localhost:8989
+"
 
-while getopts 'Xfn:' flag; do
-	case "${flag}" in 
+while getopts 'hXfn:' flag; do
+	case "${flag}" in
 		n) node="${OPTARG}" ;;
 		X) X11=true ;;
 		f) forward=true ;;
+		h) showhelp=true ;;
 		*) echo "Unexpected flag ${flag}" ;;
 	esac
 done
+
+if [ $showhelp ]
+then
+	echo "${helptxt}"
+	exit 0
+fi
 
 sshcmd="wg41@${node}${sshcmd}"
 if [ $X11 ]
