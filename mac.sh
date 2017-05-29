@@ -16,6 +16,8 @@ echo "Welcome Winthrop"
 
 export neurobioServer="wg41@transfer.orchestra.med.harvard.edu:/files/Neurobio/DattaLab/win/"
 export groupsFolder="wg41@transfer.orchestra.med.harvard.edu:/groups/datta/win/"
+export groupsDatta="wg41@transfer.orchestra.med.harvard.edu:/groups/datta/"
+export groupsJeff="wg41@transfer.orchestra.med.harvard.edu:/groups/datta/Jeff/"
 alias mountneurobio="sshfs ${neurobioServer} neuro/"
 alias mountgroup="sshfs ${groupsFolder} neuro/"
 # make bash use vi keybindings
