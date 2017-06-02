@@ -1,0 +1,34 @@
+#!/bin/bash
+
+mem="3500"
+transfer=""
+ncpu="3"
+port="8989"
+nbdir="~/notebooks"
+verbose=""
+
+while getopts "m:tn:p:d:v" flag; do
+  case "${flag}" in
+    m) mem="${OPTARG}" ;;
+    t) transfer="1" ;;
+    n) ncpu="${OPTARG}" ;;
+    p) port="${OPTARG}" ;;
+    d) nbdir="${OPTARG}" ;;
+    v) verbose="1" ;;
+    *) echo "Fuck you you stupid fucking idiot" ;;
+  esac
+done
+
+command='bsub -q interactive -n ${ncpu} -R "rusage[mem=${mem}]"'
+
+if [ $transfer ]; then
+ command='${command} -R "select[transfer]"'
+fi
+
+command='${command} jupyter notebook --port=${port} --browser="none" --ip="*" --notebook-dir="${nbdir}"'
+if [ $verbose ]; then
+  # output just the text
+  echo $command
+else
+  eval "$command"
+fi
