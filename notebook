@@ -19,13 +19,13 @@ while getopts "m:tn:p:d:v" flag; do
   esac
 done
 
-command='bsub -q interactive -n ${ncpu} -R "rusage[mem=${mem}]"'
+command="bsub -q interactive -n ${ncpu} -R \"rusage[mem=${mem}]\""
 
 if [ $transfer ]; then
- command='${command} -R "select[transfer]"'
+ command="${command} -R \"select[transfer]\""
 fi
 
-command='${command} jupyter notebook --port=${port} --browser="none" --ip="*" --notebook-dir="${nbdir}"'
+command="${command} jupyter notebook --port=${port} --browser='none' --ip='*' --notebook-dir='${nbdir}'"
 if [ $verbose ]; then
   # output just the text
   echo $command

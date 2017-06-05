@@ -12,12 +12,13 @@ disphelp=""
 thehelp="
 wsub Help - options that you can pass:
 -m: option - memory
--i: flag - interactive mode (default)
+-i: flag - set queue to interactive (default)
 -w: option - wall time
 -n: option - num procs
 -o: option - specify output file
 -d: flag - set debug true to print command
 -s: flag - set queue to short
+-p: flag - set queue to priority
 -c: option - code to run on bsub - don't forget quotes when using spaces!!! - default is bash
 -t: flag - adds transfer node
 -q: option - specify which queue you want to run in
@@ -27,7 +28,7 @@ example:
 	wsub -t -n 2 -m 3
 "
 
-while getopts "w:n:sc:m:idq:to:h" flag; do
+while getopts "w:n:sc:m:idq:to:hp" flag; do
     case "${flag}" in 
         m) mem="$(echo "${OPTARG} * 1000" | bc -l )" ;; # how much memory in gb
         i) queue="interactive" ;;
@@ -36,6 +37,7 @@ while getopts "w:n:sc:m:idq:to:h" flag; do
         d) debug=true ;;
         o) output="${OPTARG}" ;; # an output file
         s) queue="short" ;;
+        p) queue="priority" ;;
         c) com="${OPTARG}" ;; # the command to send to 
         t) transfer=true ;;
         q) queue="${OPTARG}" ;;
