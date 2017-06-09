@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh wg41@login.rc.hms.harvard.edu
