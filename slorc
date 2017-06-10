@@ -1,0 +1,39 @@
+#!/bin/bash
+
+node=""
+x11=""
+port=""
+login="login"
+user="wg41"
+harvard="rc.hms.harvard.edu"
+
+while getopts 'n:xfu:' flag; do
+	case "${flag}" in
+		n) node="${OPTARG}";;
+		x) x11=true;;
+		f) port=true;;
+		u) user="${OPTARG}";;
+		*) echo "fuck you asshole. Wrong arguments";;
+	esac
+done
+
+cmd="ssh"
+
+if [ $x11 ];
+then
+	cmd="${cmd} -XY"
+fi
+
+if [ $port ];
+then
+	cmd="${cmd} -L 8989:localhost:8989"
+fi
+
+if [ $node ];
+then
+	login="${node}.o2"
+fi
+
+cmd="${cmd} ${user}@${login}.${harvard}"
+
+eval "${cmd}"

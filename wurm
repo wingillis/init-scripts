@@ -1,0 +1,13 @@
+#!/bin/bash
+# my version of slurm to make some things easy on me
+
+cmd="echo 'there does not seem to be anything here'"
+
+while getopts 'i' flag; do
+  case "${flag}" in
+    i) cmd="srun -n 1 -t 12:00 --pty -p interactive bash";;
+    *) echo "what the fuck willis what the fuck you doin to me";;
+  esac
+done
+
+eval "${cmd}"

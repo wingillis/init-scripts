@@ -1,0 +1,16 @@
+#!/bin/bash
+
+pth="."
+outfile="mouse-extract.h5"
+ncpu="8"
+
+while getopts "p:o:n:" flag; do
+  case "${flag}" in
+    p) pth="${OPTARG}";;
+    o) outfile="${OPTARG}";;
+    n) ncpu="${OPTARG}";;
+    *) echo "Fuck you you piece of shit";;
+  esac
+done
+
+mpirun -n "${ncpu}" moseq extract-k2 "${pth}" --out-file "${outfile}" 
