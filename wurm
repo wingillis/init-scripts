@@ -1,13 +1,24 @@
 #!/bin/bash
-# my version of slurm to make some things easy on me
+# my version of (interactive) slurm to make some things easy on me
 
+mem="4G"
+partition="interactive"
+interactive=""
 cmd="echo 'there does not seem to be anything here'"
 
-while getopts 'i' flag; do
+
+while getopts 'im' flag; do
   case "${flag}" in
-    i) cmd="srun -n 1 -t 12:00 --pty -p interactive bash";;
+    i) interactive=true;;
+    m) mem="${OPTARG}";;
     *) echo "what the fuck willis what the fuck you doin to me";;
   esac
 done
 
-eval "${cmd}"
+cmd="srun -n 3 -t 12:00:00 --mem=${mem} -p ${partition}"
+
+if [ $interactive ]; then
+  cmd="${cmd} --pty"
+fi
+
+eval "${cmd} bash"
