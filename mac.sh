@@ -20,6 +20,7 @@ export groupsDatta="wg41@transfer.orchestra.med.harvard.edu:/groups/datta/"
 export groupsJeff="wg41@transfer.orchestra.med.harvard.edu:/groups/datta/Jeff/"
 alias mountneurobio="sshfs ${neurobioServer} neuro/"
 alias mountgroup="sshfs ${groupsFolder} neuro/"
+alias mountjeff="sshfs ${groupsJeff} neuro/"
 # make bash use vi keybindings
 set -o vi
 
