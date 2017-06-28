@@ -6,13 +6,15 @@ port=""
 login="login"
 user="wg41"
 harvard="rc.hms.harvard.edu"
+shell="zsh"
 
-while getopts 'n:xfu:' flag; do
+while getopts 'n:xfu:b' flag; do
 	case "${flag}" in
 		n) node="${OPTARG}";;
 		x) x11=true;;
 		f) port=true;;
 		u) user="${OPTARG}";;
+		b) shell="bash";;
 		*) echo "fuck you asshole. Wrong arguments";;
 	esac
 done
@@ -34,6 +36,7 @@ then
 	login="${node}.o2"
 fi
 
-cmd="${cmd} ${user}@${login}.${harvard}"
+cmd="${cmd} ${user}@${login}.${harvard} -t '${shell} -i'"
+#cmd="${cmd} ${user}@${login}.${harvard}"
 
 eval "${cmd}"
