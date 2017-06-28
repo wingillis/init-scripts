@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# run like so in another window
+# port-forward -o 001-062 -n clarinet
+
 node="clarinet"
 number="001-062"
 port="8989"

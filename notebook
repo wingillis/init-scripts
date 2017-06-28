@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# starts a jupyter notebook like so:
+# notebook -m 4000 -d ~/notebookdir -n 1
+
 mem="3500"
 transfer=""
 ncpu="3"
