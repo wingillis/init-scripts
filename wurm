@@ -1,24 +1,28 @@
 #!/bin/bash
-# my version of (interactive) slurm to make some things easy on me
+# my version of (interactive) srun to make some things easy on me
 
 mem="4G"
 partition="interactive"
 interactive=""
+ncpu="1"
+shell="zsh"
 cmd="echo 'there does not seem to be anything here'"
 
 
-while getopts 'im' flag; do
+while getopts 'im:n:s:' flag; do
   case "${flag}" in
     i) interactive=true;;
     m) mem="${OPTARG}";;
+    n) ncpu="$OPTARG";;
+    s) shell="${OPTARG}";;
     *) echo "what the fuck willis what the fuck you doin to me";;
   esac
 done
 
-cmd="srun -n 3 -t 12:00:00 --mem=${mem} -p ${partition}"
+cmd="srun -n ${ncpu} -t 12:00:00 --mem=${mem} -p ${partition}"
 
 if [ $interactive ]; then
   cmd="${cmd} --pty"
 fi
 
-eval "${cmd} bash"
+eval "${cmd} ${shell}"
