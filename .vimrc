@@ -10,6 +10,8 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'vim-scripts/matlab.vim'
+
 Plugin 'kien/rainbow_parentheses.vim'
 
 Plugin 'guns/vim-clojure-static'
@@ -49,8 +51,6 @@ Plugin 'jvirtanen/vim-octave'
 Plugin 'ervandew/supertab'
 
 Plugin 'rakr/vim-one'
-
-Plugin 'daeyun/vim-matlab'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
