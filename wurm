@@ -25,4 +25,5 @@ if [ $interactive ]; then
   cmd="${cmd} --pty"
 fi
 
+echo "${cmd} ${shell}"
 eval "${cmd} ${shell}"
