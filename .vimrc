@@ -34,17 +34,23 @@ Plugin 'vim-airline/vim-airline'
 
 Plugin 'vim-airline/vim-airline-themes'
 
-Plugin 'vim-scripts/matlab.vim'
-
 Plugin 'scrooloose/syntastic'
 
 Plugin 'posva/vim-vue'
 
-Plugin 'valloric/youcompleteme'
+" Plugin 'valloric/youcompleteme'
 
 Plugin 'othree/yajs.vim'
 
 Plugin 'digitaltoad/vim-pug'
+
+Plugin 'jvirtanen/vim-octave'
+
+Plugin 'ervandew/supertab'
+
+Plugin 'rakr/vim-one'
+
+Plugin 'daeyun/vim-matlab'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -59,12 +65,13 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-syntax on
 au VimEnter * RainbowParenthesesToggle
 set t_Co=256
-set background=dark
-colorscheme base16-tomorrow-night
+" let base16colorspace=256
+set background=light
+colorscheme one
 set number
+syntax on
 
 "set nowrap
 set tabstop=2
@@ -83,6 +90,7 @@ map <C-n> :NERDTreeToggle<CR>
 let filetype_m='matlab'
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='one'
 
 set laststatus=2
 
