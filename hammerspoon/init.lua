@@ -58,3 +58,42 @@ end
 mod:bind('', 'escape', function()
 	mod:exit()
 end)
+
+function command_output(some_output)
+	if some_output["uuid"] == "0001" then
+		hs.execute("open -a 'Google Chrome' -n --args --profile-directory='Profile 2'")
+		-- hs.window.switcher.new(hs.window.filter.new{'Google Chrome'}):next()
+		hs.timer.usleep(200)
+		hs.window.filter.default:getWindows(hs.window.filter.sortByCreatedLast)[1]:focus()
+	end
+	if some_output["uuid"] == "0002" then
+		hs.execute("open -a 'Google Chrome' -n --args --profile-directory='Default'")
+		-- hs.window.switcher.new(hs.window.filter.new{'Google Chrome'}):next()
+		hs.timer.usleep(200)
+		hs.window.filter.default:getWindows(hs.window.filter.sortByCreatedLast)[1]:focus()
+	end
+
+end
+
+function command_chooser()
+	local variablethiin = hs.chooser.new(command_output)
+	variablethiin:bgDark(true)
+	local choices = {
+		{
+			["text"] = "New Chrome Window - Winthrop",
+			["uuid"] = "0001"
+		},
+		{
+			["text"] = "New Chrome Window - Harvard",
+			["uuid"] = "0002"
+		}
+	}
+
+	variablethiin:choices(choices)
+	variablethiin:show()
+end
+
+hs.hotkey.bind({"ctrl", "alt"}, "Space", command_chooser)
+hs.hotkey.bind({"ctrl", "alt"}, "k", function()
+	hs.execute("say 'Kristen, what are you doing over here?'")
+end)
