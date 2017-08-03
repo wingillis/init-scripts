@@ -126,11 +126,11 @@
             "name": "vim-mode",
             "selected": false,
             "simple_modifications": {
+                "caps_lock": "escape",
                 "h": "left_arrow",
                 "j": "down_arrow",
                 "k": "up_arrow",
-                "l": "right_arrow",
-                "caps_lock": "escape"
+                "l": "right_arrow"
             },
             "virtual_hid_keyboard": {
                 "caps_lock_delay_milliseconds": 0,
