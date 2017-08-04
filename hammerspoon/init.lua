@@ -42,6 +42,7 @@ end)
 
 function control_handler(evt)
 	local dont_propagate = true
+	-- all alphanumeric chars shouldn't get through
 	if evt:getCharacters():match("%W") then
 		dont_propagate = false
 	end
@@ -62,6 +63,14 @@ function control_handler(evt)
 	end
 	if evt:getCharacters() == 'b' then
 		hs.eventtap.keyStroke({'alt'}, 'left')
+	end
+	if evt:getCharacters() == '0' then
+		hs.eventtap.keyStroke({'cmd'}, 'left')
+	end
+	if evt:getCharacters() == '$' then
+		hs.eventtap.keyStroke({'cmd'}, 'right')
+		-- special because it isn't an alphanumeric
+		dont_propagate = true
 	end
 	if evt:getKeyCode() == hs.keycodes.map['escape'] then
 		dont_propagate = false
