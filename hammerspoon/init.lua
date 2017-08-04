@@ -6,10 +6,6 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
   win:setFrame(f)
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
-  hs.alert.show("Hello World!")
-end)
-
 hs.hotkey.bind({"ctrl", "alt"}, "m", function()
   local mouse = hs.mouse.getAbsolutePosition()
   local mouseScreen = hs.mouse.getCurrentScreen()
@@ -27,32 +23,62 @@ hs.hotkey.bind({"ctrl", "alt"}, "m", function()
   end
 end)
 
-function select_keyboard_layout(layout)
-	hs.osascript.applescript(string.format([[
-	tell application "System Events" to tell process "Karabiner-Menu"
-		ignoring application responses
-			click menu bar item 1 of menu bar 1
-		end ignoring
-	end tell
-	do shell script "killall System\\ Events"
-	delay 0.1
-	tell application "System Events" to tell process "Karabiner-Menu"
-		tell menu bar item 1 of menu bar 1
-			click menu item "%s" of menu 1
-		end tell
-	end tell
-	]], layout))
+-- function select_keyboard_layout(layout)
+-- 	hs.osascript.applescript(string.format([[
+-- 	tell application "System Events" to tell process "Karabiner-Menu"
+-- 		ignoring application responses
+-- 			click menu bar item 1 of menu bar 1
+-- 		end ignoring
+-- 	end tell
+-- 	do shell script "killall System\\ Events"
+-- 	delay 0.1
+-- 	tell application "System Events" to tell process "Karabiner-Menu"
+-- 		tell menu bar item 1 of menu bar 1
+-- 			click menu item "%s" of menu 1
+-- 		end tell
+-- 	end tell
+-- 	]], layout))
+-- end
+
+function control_handler(evt)
+	local dont_propagate = true
+	if evt:getCharacters():match("%W") then
+		dont_propagate = false
+	end
+	if evt:getCharacters() == 'j' then
+		hs.eventtap.keyStroke('', 'down')
+	end
+	if evt:getCharacters() == 'k' then
+		hs.eventtap.keyStroke('', 'up')
+	end
+	if evt:getCharacters() == 'h' then
+		hs.eventtap.keyStroke('', 'left')
+	end
+	if evt:getCharacters() == 'l' then
+		hs.eventtap.keyStroke('', 'right')
+	end
+	if evt:getCharacters() == 'e' then
+		hs.eventtap.keyStroke({'alt'}, 'right')
+	end
+	if evt:getCharacters() == 'b' then
+		hs.eventtap.keyStroke({'alt'}, 'left')
+	end
+	if evt:getKeyCode() == hs.keycodes.map['escape'] then
+		dont_propagate = false
+	end
+	return dont_propagate
 end
 
+control_tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, control_handler)
 -- make a modal setup for hjkl nav
 mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode entered')
 
 function mod:entered()
-	select_keyboard_layout('vim-mode')
+	control_tap:start()
 end
 
 function mod:exited()
-	select_keyboard_layout('Caps -> Esc')
+	control_tap:stop()
 end
 
 mod:bind('', 'escape', function()
@@ -94,6 +120,4 @@ function command_chooser()
 end
 
 hs.hotkey.bind({"ctrl", "alt"}, "Space", command_chooser)
-hs.hotkey.bind({"ctrl", "alt"}, "k", function()
-	hs.execute("say 'Kristen, what are you doing over here?'")
-end)
+
