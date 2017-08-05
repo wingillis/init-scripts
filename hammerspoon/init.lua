@@ -67,6 +67,18 @@ function control_handler(evt)
 	if evt:getCharacters() == '0' then
 		hs.eventtap.keyStroke({'cmd'}, 'left')
 	end
+	if evt:getCharacters() == 'x' then
+		hs.eventtap.keyStroke({}, 'backspace')
+	end
+	if evt:getCharacters() == 'A' then
+		hs.eventtap.keyStroke({'cmd'}, 'right')
+		hs.eventtap.keyStroke({}, 'i')
+	end
+	if evt:getCharacters() == 'A' then
+		hs.eventtap.keyStroke({'cmd'}, 'right')
+		hs.eventtap.keyStroke({}, 'enter')
+		hs.eventtap.keyStroke({}, 'i')
+	end
 	if evt:getCharacters() == '$' then
 		hs.eventtap.keyStroke({'cmd'}, 'right')
 		-- special because it isn't an alphanumeric
@@ -90,11 +102,14 @@ function mod:exited()
 	control_tap:stop()
 end
 
-mod:bind('', 'escape', function()
+mod:bind('', 'i', function()
 	mod:exit()
 end)
 
 function command_output(some_output)
+	if some_output == nil then
+		return
+	end
 	if some_output["uuid"] == "0001" then
 		hs.execute("open -a 'Google Chrome' -n --args --profile-directory='Profile 2'")
 		-- hs.window.switcher.new(hs.window.filter.new{'Google Chrome'}):next()
@@ -113,6 +128,10 @@ end
 function command_chooser()
 	local variablethiin = hs.chooser.new(command_output)
 	variablethiin:bgDark(true)
+	qChangedCallback = function(qString)
+		print(qString)
+	end
+	variablethiin:queryChangedCallback(qChangedCallback)
 	local choices = {
 		{
 			["text"] = "New Chrome Window - Winthrop",
