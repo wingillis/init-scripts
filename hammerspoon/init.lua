@@ -1,3 +1,4 @@
+-- dofile('./vim_bindings.lua')
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
@@ -49,6 +50,12 @@ function control_handler(evt)
 	if evt:getCharacters() == 'j' then
 		hs.eventtap.keyStroke('', 'down')
 	end
+	if evt:getCharacters() == 'p' then
+		hs.timer.delayed.new(0.03, function()
+			hs.eventtap.keyStroke({'cmd'}, 'v')
+		end):start()
+		hs.eventtap.keyStroke('', 'i')
+	end
 	if evt:getCharacters() == 'k' then
 		hs.eventtap.keyStroke('', 'up')
 	end
@@ -70,14 +77,17 @@ function control_handler(evt)
 	if evt:getCharacters() == 'x' then
 		hs.eventtap.keyStroke({}, 'backspace')
 	end
-	if evt:getCharacters() == 'A' then
-		hs.eventtap.keyStroke({'cmd'}, 'right')
-		hs.eventtap.keyStroke({}, 'i')
+	if evt:getCharacters() == 'i' then
+		mod:exit()
 	end
 	if evt:getCharacters() == 'A' then
 		hs.eventtap.keyStroke({'cmd'}, 'right')
-		hs.eventtap.keyStroke({}, 'enter')
-		hs.eventtap.keyStroke({}, 'i')
+		hs.eventtap.keyStroke('', 'i')
+	end
+	if evt:getCharacters() == 'o' then
+		hs.eventtap.keyStroke({'cmd'}, 'right')
+		hs.eventtap.keyStroke({}, 'return')
+		hs.eventtap.keyStroke('', 'i')
 	end
 	if evt:getCharacters() == '$' then
 		hs.eventtap.keyStroke({'cmd'}, 'right')
@@ -92,7 +102,7 @@ end
 
 control_tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, control_handler)
 -- make a modal setup for hjkl nav
-mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode entered')
+mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
 
 function mod:entered()
 	control_tap:start()
@@ -101,10 +111,6 @@ end
 function mod:exited()
 	control_tap:stop()
 end
-
-mod:bind('', 'i', function()
-	mod:exit()
-end)
 
 function command_output(some_output)
 	if some_output == nil then
