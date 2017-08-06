@@ -1,4 +1,9 @@
--- dofile('./vim_bindings.lua')
+
+dofile('/Users/wgillis/dev/init_scripts/hammerspoon/vim_bindings.lua')
+
+local v = Vim:new()
+v:start()
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
