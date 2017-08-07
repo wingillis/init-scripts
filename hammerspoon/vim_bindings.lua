@@ -46,8 +46,8 @@ Vim = {}
 function Vim:new()
 	newObj = {state = 'normal',
 						keyMods = {}, -- these are like cmd, alt, shift, etc...
-						commandMods = {}, -- these are like d, y, c in normal mode
-						numberMods = ''}
+						commandMods = nil, -- these are like d, y, c in normal mode
+						numberMods = 0}
 
 	self.__index = self
 	return setmetatable(newObj, self)
@@ -58,10 +58,10 @@ function Vim:start()
 		return self:eventWatcher(evt)
 	end)
 	self.modal = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
-	self.modal:entered = function ()
+	function self.modal:entered()
 		self.tapWatcher:start()
 	end
-	self.modal:exited = function ()
+	function self.modal:exited()
 		self.tapWatcher:stop()
 	end
 end
@@ -95,7 +95,22 @@ end
 function Vim:handleKeyEvent(char)
 	-- check for text modifiers
 	local modifiers = 'dcyr'
+	-- allows for visual mode too
+	local movements = {
+		j = keyPressFactory(self.keyMods, 'down'),
+		k = keyPressFactory(self.keyMods, 'up'),
+		h = keyPressFactory(self.keyMods, 'left'),
+		l = keyPressFactory(self.keyMods, 'right'),
+		['0'] = keyPressFactory(mergeArrays(self.keyMods, {'cmd'}), 'left'),
+		['$'] = keyPressFactory(mergeArrays(self.keyMods, {'cmd'}), 'right')
+	}
 
+	if self.commandMods ~= nil and modifiers:find(self.commandMods) ~= nil then
+		-- do something related to modifiers
+	else
+		-- do movement commands, but state-dependent
+
+	end
 	-- check to see if the character should propagate through
 	if self.state == 'inserting' then
 		return false
@@ -116,6 +131,7 @@ function Vim:eventWatcher(evt)
 		self:setMode('ex')
 		-- TODO: implement ex mode
 	elseif evt:getKeyCode() == hs.keycodes.map['escape'] then
+		-- get out of visual mode
 		self:setMode('normal')
 	elseif insertEvents:find(evtChar) ~= nil then
 		-- do the insert
@@ -159,7 +175,7 @@ function Vim:setMode(val)
 		self.commandMods = {}
 	elseif val == 'ex' then
 		-- do nothing because this is not implemented
-	elseif val == 'inserting'
+	elseif val == 'inserting' then
 		-- do nothing because this is a placeholder
 	end
 end
