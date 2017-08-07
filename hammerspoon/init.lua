@@ -46,76 +46,6 @@ end)
 -- 	]], layout))
 -- end
 
-function control_handler(evt)
-	local dont_propagate = true
-	-- all alphanumeric chars shouldn't get through
-	if evt:getCharacters():match("%W") then
-		dont_propagate = false
-	end
-	if evt:getCharacters() == 'j' then
-		hs.eventtap.keyStroke('', 'down')
-	end
-	if evt:getCharacters() == 'p' then
-		hs.timer.delayed.new(0.03, function()
-			hs.eventtap.keyStroke({'cmd'}, 'v')
-		end):start()
-		hs.eventtap.keyStroke('', 'i')
-	end
-	if evt:getCharacters() == 'k' then
-		hs.eventtap.keyStroke('', 'up')
-	end
-	if evt:getCharacters() == 'h' then
-		hs.eventtap.keyStroke('', 'left')
-	end
-	if evt:getCharacters() == 'l' then
-		hs.eventtap.keyStroke('', 'right')
-	end
-	if evt:getCharacters() == 'e' then
-		hs.eventtap.keyStroke({'alt'}, 'right')
-	end
-	if evt:getCharacters() == 'b' then
-		hs.eventtap.keyStroke({'alt'}, 'left')
-	end
-	if evt:getCharacters() == '0' then
-		hs.eventtap.keyStroke({'cmd'}, 'left')
-	end
-	if evt:getCharacters() == 'x' then
-		hs.eventtap.keyStroke({}, 'backspace')
-	end
-	if evt:getCharacters() == 'i' then
-		mod:exit()
-	end
-	if evt:getCharacters() == 'A' then
-		hs.eventtap.keyStroke({'cmd'}, 'right')
-		hs.eventtap.keyStroke('', 'i')
-	end
-	if evt:getCharacters() == 'o' then
-		hs.eventtap.keyStroke({'cmd'}, 'right')
-		hs.eventtap.keyStroke({}, 'return')
-		hs.eventtap.keyStroke('', 'i')
-	end
-	if evt:getCharacters() == '$' then
-		hs.eventtap.keyStroke({'cmd'}, 'right')
-		-- special because it isn't an alphanumeric
-		dont_propagate = true
-	end
-	if evt:getKeyCode() == hs.keycodes.map['escape'] then
-		dont_propagate = false
-	end
-	return dont_propagate
-end
-
-control_tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, control_handler)
--- make a modal setup for hjkl nav
-mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
-
-function mod:entered()
-	control_tap:start()
-end
-
-function mod:exited()
-	control_tap:stop()
-end
 
 function command_output(some_output)
 	if some_output == nil then
@@ -139,10 +69,10 @@ end
 function command_chooser()
 	local variablethiin = hs.chooser.new(command_output)
 	variablethiin:bgDark(true)
-	qChangedCallback = function(qString)
-		print(qString)
-	end
-	variablethiin:queryChangedCallback(qChangedCallback)
+	-- qChangedCallback = function(qString)
+	-- 	print(qString)
+	-- end
+	-- variablethiin:queryChangedCallback(qChangedCallback)
 	local choices = {
 		{
 			["text"] = "New Chrome Window - Winthrop",

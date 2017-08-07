@@ -95,6 +95,7 @@ end
 function Vim:handleKeyEvent(char)
 	-- check for text modifiers
 	local modifiers = 'dcyr'
+	local stop_event = true -- stop event from propagating
 	-- allows for visual mode too
 	local movements = {
 		j = keyPressFactory(self.keyMods, 'down'),
@@ -107,14 +108,16 @@ function Vim:handleKeyEvent(char)
 
 	if self.commandMods ~= nil and modifiers:find(self.commandMods) ~= nil then
 		-- do something related to modifiers
-	else
+	elseif movements[char] ~= nil then
 		-- do movement commands, but state-dependent
-
+		movements[char]()
+		stop_event = true
 	end
 	-- check to see if the character should propagate through
 	if self.state == 'inserting' then
-		return false
+		stop_event = false
 	end
+	return stop_event
 end
 
 function Vim:eventWatcher(evt)
