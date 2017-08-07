@@ -54,16 +54,18 @@ function Vim:new()
 end
 
 function Vim:start()
+	local selfPointer = self
 	self.tapWatcher = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
 		return self:eventWatcher(evt)
 	end)
 	self.modal = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
 	function self.modal:entered()
-		self.tapWatcher:start()
+		selfPointer.tapWatcher:start()
 	end
 	function self.modal:exited()
-		self.tapWatcher:stop()
+		selfPointer.tapWatcher:stop()
 	end
+
 end
 
 function Vim:handleMovement(mod, chars)
