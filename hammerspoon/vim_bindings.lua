@@ -32,15 +32,23 @@ function mergeTables(t1, t2)
 	return output
 end
 
+function keyPress(mod, char)
+	hs.eventtap.keyStroke(mod, char, 20000)
+end
+
+function keyPressFactory(mod, char)
+	-- return a function to press a certain key
+	return function () keyPress(mod, char) end
+end
+
 Vim = {}
 
 function Vim:new()
-	newObj = {normalMode = false,
-						visualMode = false,
-						insertMode = true, 
-						modifiers = {},
-						textModifiers = ''
-					}
+	newObj = {state = 'normal',
+						keyMods = {}, -- these are like cmd, alt, shift, etc...
+						commandMods = {}, -- these are like d, y, c in normal mode
+						numberMods = ''}
+
 	self.__index = self
 	return setmetatable(newObj, self)
 end
@@ -49,14 +57,19 @@ function Vim:start()
 	self.tapWatcher = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
 		return self:eventWatcher(evt)
 	end)
-	self.mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
+	self.modal = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
+	self.modal:entered = function ()
+		self.tapWatcher:start()
+	end
+	self.modal:exited = function ()
+		self.tapWatcher:stop()
+	end
 end
-
 
 function Vim:handleMovement(mod, chars)
 	local moved = false
 	-- handles movement in normal mode and visual mode
-	local kpFun = function(mod, k) 
+	local kpFun = function(mod, k)
 		-- the 20000 = keydown length in mircoseconds
 		return function () hs.eventtap.keyStroke(mod, k, 20000) end
 	end
@@ -76,29 +89,79 @@ function Vim:handleMovement(mod, chars)
 	end
 
 	return moved
-		
+
+end
+
+function Vim:handleKeyEvent(char)
+	-- check for text modifiers
+	local modifiers = 'dcyr'
+
+	-- check to see if the character should propagate through
+	if self.state == 'inserting' then
+		return false
+	end
 end
 
 function Vim:eventWatcher(evt)
 	-- stop an event from propagating through the event system
 	local stop_event = true
+	local evtChar = evt:getCharacters()
+	local insertEvents = 'iIsaAoO'
 	-- if v key is hit, then go into visual mode
-	if evt:getCharacters() == 'v' then
-		self:setVisualMode(true)
+	if evtChar == 'v' then
+		self:setMode('visual')
 		return stop_event
+	elseif evtChar == ':' then
+		-- do nothing for now because no ex mode
+		self:setMode('ex')
+		-- TODO: implement ex mode
+	elseif evt:getKeyCode() == hs.keycodes.map['escape'] then
+		self:setMode('normal')
+	elseif insertEvents:find(evtChar) ~= nil then
+		-- do the insert
+		self:insert(evtChar)
+	else
+		-- anything else, literally
+		stop_event = self:handleKeyEvent(evtChar)
 	end
-
-	if self.visualMode then
-		-- what are the characters to watch out for?
-		return self:handleVisualMode(evt)
-	end
+	return stop_event
 end
 
-function Vim:setVisualMode(val)
-	-- val is bool
-	self.visualMode = val
+function Vim:insert(char)
+	-- if is an insert event then do something
+	-- ...
+	if char == 's' then
+		-- delete character and exit
+		keyPress('', 'forwarddelete')
+	elseif char == 'a' then
+		keyPress('', 'right')
+	elseif char == 'A' then
+		keyPress({'cmd'}, 'right')
+	elseif char == 'I' then
+		keyPress({'cmd'}, 'left')
+	end
+	-- TODO: implement o and O
+	self:exitModal()
+end
+
+function Vim:exitModal()
+	self.modal:exit()
+end
+
+function Vim:setMode(val)
+	self.state = val
 	-- TODO: change any other flags that are important for visual mode changes
-	self.modifiers = {'shift'}
+	if val == 'visual' then
+		self.keyMods = {'shift'}
+		self.commandMods = {}
+	elseif val == 'normal' then
+		self.keyMods = {}
+		self.commandMods = {}
+	elseif val == 'ex' then
+		-- do nothing because this is not implemented
+	elseif val == 'inserting'
+		-- do nothing because this is a placeholder
+	end
 end
 
 function Vim:handleVisualMode(evt)
