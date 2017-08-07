@@ -1,4 +1,5 @@
 function mergeArrays(ar1, ar2)
+	-- add each array value to a table, and send the iteration at the end
 	local tmp = {}
 	for _, v in ipairs(ar1) do
 		tmp[v] = true
@@ -37,14 +38,16 @@ function Vim:new()
 	newObj = {normalMode = false,
 						visualMode = false,
 						insertMode = true, 
-						modifiers = {}}
+						modifiers = {},
+						textModifiers = ''
+					}
 	self.__index = self
 	return setmetatable(newObj, self)
 end
 
 function Vim:start()
 	self.tapWatcher = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
-		self:eventWatcher(evt)
+		return self:eventWatcher(evt)
 	end)
 	self.mod = hs.hotkey.modal.new({"alt"}, "escape", 'Vim-mode')
 end
@@ -61,7 +64,10 @@ function Vim:handleMovement(mod, chars)
 									 k = kpFun(mod, 'up'),
 									 l = kpFun(mod, 'right'),
 									 h = kpFun(mod, 'left'),
-									 ['0'] = kpFun(mergeArrays(mod, {'cmd'}), 'left')}
+									 ['0'] = kpFun(mergeArrays(mod, {'cmd'}), 'left'),
+								 	 ['$'] = kpFun(mergeArrays(mod, {'cmd'}), 'right')
+								 }
+	-- TODO: add support for modifier letters as well
 	if keymap[chars] == nil then
 		-- do nothing except propagate value if not alphanumeric?
 	else
@@ -74,22 +80,38 @@ function Vim:handleMovement(mod, chars)
 end
 
 function Vim:eventWatcher(evt)
-	if self.textManipulateMode then
+	-- stop an event from propagating through the event system
+	local stop_event = true
+	-- if v key is hit, then go into visual mode
+	if evt:getCharacters() == 'v' then
+		self:setVisualMode(true)
+		return stop_event
+	end
+
+	if self.visualMode then
 		-- what are the characters to watch out for?
-		local chars = 'dyr'
+		return self:handleVisualMode(evt)
 	end
 end
 
 function Vim:setVisualMode(val)
 	-- val is bool
-	self.visualMode = true
+	self.visualMode = val
 	-- TODO: change any other flags that are important for visual mode changes
 	self.modifiers = {'shift'}
 end
 
 function Vim:handleVisualMode(evt)
+	local keywords = 'dycp'
 	local chars = evt:getCharacters()
 	local moved = self:handleMovement(self.modifiers, chars)
+	if self.textModifiers ~= '' then
+		self:handleTextModifier(chars)
+	end
+	-- if the keyword is the event character, then it's something interesting
+	if string.match(keywords, chars) and not moved then
+		self.textModifiers = chars
+	end
 	-- if moved, then probably the user wasn't doing anything else
 end
 
