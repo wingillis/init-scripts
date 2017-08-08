@@ -1,7 +1,8 @@
 
-dofile('/Users/wgillis/dev/init_scripts/hammerspoon/vim_bindings.lua')
+Vim = require('vim_bindings')
 
 local v = Vim:new()
+-- v:setDebug(true) -- uncomment this if you want some things printed to the hammerspoon console
 v:start()
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
