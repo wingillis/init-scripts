@@ -12,6 +12,8 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugin 'vim-scripts/matlab.vim'
 
+Plugin 'grep.vim'
+
 Plugin 'kien/rainbow_parentheses.vim'
 
 Plugin 'guns/vim-clojure-static'
