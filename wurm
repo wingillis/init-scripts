@@ -6,14 +6,16 @@ partition="interactive"
 interactive=""
 ncpu="1"
 shell="zsh"
+x11=""
 cmd="echo 'there does not seem to be anything here'"
 
 
-while getopts 'im:n:s:' flag; do
+while getopts 'im:n:s:x' flag; do
   case "${flag}" in
     i) interactive=true;;
     m) mem="${OPTARG}";;
     n) ncpu="$OPTARG";;
+		x) x11=true;;
     s) shell="${OPTARG}";;
     *) echo "what the fuck willis what the fuck you doin to me";;
   esac
@@ -23,6 +25,10 @@ cmd="srun -n ${ncpu} -t 12:00:00 --mem=${mem} -p ${partition}"
 
 if [ $interactive ]; then
   cmd="${cmd} --pty"
+fi
+
+if [ $x11 ]; then
+	cmd="${cmd} --x11"
 fi
 
 echo "${cmd} ${shell}"

@@ -10,7 +10,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'vim-scripts/matlab.vim'
+" Plugin 'vim-scripts/matlab.vim'
 
 Plugin 'kien/rainbow_parentheses.vim'
 
