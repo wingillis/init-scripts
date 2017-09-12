@@ -109,3 +109,7 @@ autocmd filetype crontab setlocal nobackup nowritebackup
 
 set exrc
 set secure
+
+if has('nvim')
+	map <C-o> :tabe<CR> :terminal<CR>
+endif
