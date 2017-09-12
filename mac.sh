@@ -31,6 +31,8 @@ function cl {
   ls -la .
 }
 
+alias matgraph="matlab -nodesktop -nosplash"
+
 # make bash use vi keybindings
 set -o vi
 
