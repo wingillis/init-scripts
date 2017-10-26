@@ -28,8 +28,8 @@ example:
 	wsub -t -n 2 -m 3
 "
 
-while getopts "w:n:sc:m:idq:to:hp" flag; do
-    case "${flag}" in 
+while getopts "w:n:sc:m:idto:hp:" flag; do
+    case "${flag}" in
         m) mem="$(echo "${OPTARG} * 1000" | bc -l )" ;; # how much memory in gb
         i) queue="interactive" ;;
         w) wall="${OPTARG}" ;;
@@ -37,11 +37,10 @@ while getopts "w:n:sc:m:idq:to:hp" flag; do
         d) debug=true ;;
         o) output="${OPTARG}" ;; # an output file
         s) queue="short" ;;
-        p) queue="priority" ;;
-        c) com="${OPTARG}" ;; # the command to send to 
+        p) queue="${OPTARG}" ;;
+        c) com="${OPTARG}" ;; # the command to send to
         t) transfer=true ;;
-        q) queue="${OPTARG}" ;;
-	h) disphelp=true ;;
+				h) disphelp=true ;;
         *) echo "not a valid arg" ;;
     esac
 done

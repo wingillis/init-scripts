@@ -1,19 +1,32 @@
 #!/bin/bash
 
 # run like so in another window
-# port-forward -o 001-062 -n clarinet
+# port-forward -n clarinet001-062
 
-node="clarinet"
-number="001-062"
+node="clarinet001-062"
 port="8989"
+o2=""
+verbose=""
+address="orchestra"
 
-while getopts "n:o:p:" flag; do
+while getopts "vn:p:2" flag; do
   case "${flag}" in
     n) node="${OPTARG}" ;;
-    o) number="${OPTARG}" ;;
     p) port="${OPTARG}" ;;
+    2) o2=true;;
+    v) verbose=true;;
     *) echo "don't understand" ;;
   esac
 done
 
-ssh -L ${port}:localhost:${port} ${node}${number}.orchestra
+if [ $o2 ]; then
+  address="o2.rc.hms.harvard.edu"
+fi
+
+cmd="ssh -L ${port}:localhost:${port} ${node}.${address}"
+
+if [ $verbose ]; then
+  echo ${cmd}
+else
+  eval ${cmd}
+fi

@@ -11,9 +11,10 @@ x11=""
 cmd="echo 'there does not seem to be anything here'"
 cpuToggle=""
 cpuFlag="-n"
+verbose=""
 
 
-while getopts 'im:n:s:xp:ct:' flag; do
+while getopts 'im:n:s:xp:ct:v' flag; do
   case "${flag}" in
     i) interactive=true;;
     m) mem="${OPTARG}";;
@@ -23,6 +24,7 @@ while getopts 'im:n:s:xp:ct:' flag; do
     s) shell="${OPTARG}";;
     c) cpuToggle=true;;
     t) t="${OPTARG}";;
+    v) verbose=true;;
     *) echo "what the fuck willis what the fuck you doin to me";;
   esac
 done
@@ -41,5 +43,8 @@ if [ $x11 ]; then
 	cmd="${cmd} --x11"
 fi
 
-echo "${cmd} ${shell}"
-eval "${cmd} ${shell}"
+if [ $verbose ]; then
+  echo "${cmd} ${shell}"
+else
+  eval "${cmd} ${shell}"
+fi

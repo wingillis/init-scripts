@@ -3,25 +3,34 @@
 # use like so:
 # orchid -f -u wg41 -n mezzanine
 
+verbose=""
 node="orchestra"
-X11=""
+x11=""
 forward=""
 sshcmd=".med.harvard.edu"
 showhelp=""
 user="wg41"
+port="8989"
+
+if ! [ -z $ECOMMONS_ID ]; then
+	user=$ECOMMONS_ID
+	echo "using ecommons to log into orchestra"
+fi
 helptxt="
 -n: which orchestra node
--X: X11 forwarding
+-X: x11 forwarding
 -f: port forward to localhost:8989
 "
 
-while getopts 'u:hXfn:' flag; do
+while getopts 'u:hxfn:vp:' flag; do
 	case "${flag}" in
 		u) user="${OPTARG}" ;;
 		n) node="${OPTARG}" ;;
-		X) X11=true ;;
+		v) verbose=true;;
+		x) x11=true ;;
 		f) forward=true ;;
 		h) showhelp=true ;;
+		p) port="${OPTARG}";;
 		*) echo "Unexpected flag ${flag}" ;;
 	esac
 done
@@ -33,14 +42,18 @@ then
 fi
 
 sshcmd="${user}@${node}${sshcmd}"
-if [ $X11 ]
+if [ $x11 ]
 then
 	sshcmd="-Y ${sshcmd}"
 fi
 
 if [ $forward ]
 then
-	sshcmd="-L 8989:localhost:8989 ${sshcmd}"
+	sshcmd="-L ${port}:localhost:${port} ${sshcmd}"
 fi
 
-eval "ssh $sshcmd"
+if [ $verbose ]; then
+	echo "ssh ${sshcmd}"
+else
+	eval "ssh $sshcmd"
+fi
