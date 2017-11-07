@@ -22,7 +22,9 @@ Plugin 'scrooloose/nerdcommenter'
 
 Plugin 'tpope/vim-fireplace'
 
-Plugin 'chriskempson/base16-vim'
+" Plugin 'chriskempson/base16-vim'
+
+Plugin 'Soares/base16.nvim'
 
 Plugin 'vim-scripts/paredit.vim'
 
@@ -67,15 +69,16 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-au VimEnter * RainbowParenthesesToggle
+" au VimEnter * RainbowParenthesesToggle
 set t_Co=256
-" let base16colorspace=256
-set background=light
-colorscheme one
+let base16colorspace=256
+set background=dark
+colorscheme embers
 set number
 syntax on
 
 "set nowrap
+set termguicolors
 set tabstop=2
 set shiftwidth=2
 set autoindent
@@ -91,8 +94,10 @@ map <C-n> :NERDTreeToggle<CR>
 
 let filetype_m='matlab'
 
+let g:syntastic_disabled_filetypes=['py']
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='one'
+let g:base16_airline=1
+" let g:airline_theme='one'
 
 set laststatus=2
 

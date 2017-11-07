@@ -1,8 +1,9 @@
 
 Vim = require('vim_bindings')
+-- Vim = require('vim')
 
 local v = Vim:new()
-v:setDebug(true) -- uncomment this if you want some things printed to the hammerspoon console
+-- v:setDebug(true) -- uncomment this if you want some things printed to the hammerspoon console
 v:start()
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
