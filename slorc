@@ -15,7 +15,7 @@ fi
 harvard="rc.hms.harvard.edu"
 shell="zsh"
 
-while getopts 'n:xfu:s:vp:' flag; do
+while getopts 'n:xfu:s:vp:l:' flag; do
 	case "${flag}" in
 		n) node="${OPTARG}";;
 		x) x11=true;;
@@ -23,6 +23,7 @@ while getopts 'n:xfu:s:vp:' flag; do
 		u) user="${OPTARG}";;
 		s) shell="${OPTARG}";;
 		v) verbose=true;;
+		l) login="${OPTARG}";;
 		p) port="${OPTARG}";;
 		*) echo "fuck you asshole. Wrong arguments";;
 	esac
