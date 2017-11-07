@@ -1,20 +1,30 @@
 #!/bin/bash
 
+verbose=""
 node=""
 x11=""
-port=""
+forward=""
 login="login"
 user="wg41"
+port="8989"
+
+if ! [ -z $ECOMMONS_ID ]; then
+	user=$ECOMMONS_ID
+	echo "using defined ecommons id"
+fi
 harvard="rc.hms.harvard.edu"
 shell="zsh"
 
-while getopts 'n:xfu:b' flag; do
+while getopts 'n:xfu:s:vp:l:' flag; do
 	case "${flag}" in
 		n) node="${OPTARG}";;
 		x) x11=true;;
-		f) port=true;;
+		f) forward=true;;
 		u) user="${OPTARG}";;
-		b) shell="bash";;
+		s) shell="${OPTARG}";;
+		v) verbose=true;;
+		l) login="${OPTARG}";;
+		p) port="${OPTARG}";;
 		*) echo "fuck you asshole. Wrong arguments";;
 	esac
 done
@@ -23,12 +33,12 @@ cmd="ssh"
 
 if [ $x11 ];
 then
-	cmd="${cmd} -XY"
+	cmd="${cmd} -Y"
 fi
 
-if [ $port ];
+if [ $forward ];
 then
-	cmd="${cmd} -L 8989:localhost:8989"
+	cmd="${cmd} -L ${port}:localhost:${port}"
 fi
 
 if [ $node ];
@@ -37,6 +47,9 @@ then
 fi
 
 cmd="${cmd} ${user}@${login}.${harvard} -t '${shell} -i'"
-#cmd="${cmd} ${user}@${login}.${harvard}"
 
-eval "${cmd}"
+if [ $verbose ]; then
+	echo "${cmd}"
+else
+	eval "${cmd}"
+fi

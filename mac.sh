@@ -13,7 +13,7 @@ export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 alias matterm="matlab -nodesktop -nosplash"
 
 orchestraServer="wg41@transfer.orchestra.med.harvard.edu"
-o2server="wg41@login.rc.hms.harvard.edu"
+o2server="wg41@transfer.rc.hms.harvard.edu"
 export neurobioServer="${orchestraServer}:/files/Neurobio/DattaLab/win/"
 export groupsFolder="${orchestraServer}:/groups/datta/win/"
 export groups2="${o2server}:/n/groups/datta/win/"
@@ -30,6 +30,8 @@ function cl {
   echo $(pwd)
   ls -la .
 }
+
+alias matgraph="matlab -nodesktop -nosplash"
 
 # make bash use vi keybindings
 set -o vi

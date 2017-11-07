@@ -10,7 +10,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'vim-scripts/matlab.vim'
+" Plugin 'vim-scripts/matlab.vim'
 
 Plugin 'grep.vim'
 
@@ -114,3 +114,7 @@ autocmd filetype crontab setlocal nobackup nowritebackup
 
 set exrc
 set secure
+
+if has('nvim')
+	map <C-o> :tabe<CR> :terminal<CR>
+endif
