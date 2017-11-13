@@ -22,7 +22,9 @@ Plugin 'scrooloose/nerdcommenter'
 
 Plugin 'tpope/vim-fireplace'
 
-Plugin 'chriskempson/base16-vim'
+"Plugin 'chriskempson/base16-vim'
+
+Plugin 'Soares/base16.nvim'
 
 Plugin 'vim-scripts/paredit.vim'
 
@@ -67,15 +69,14 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-au VimEnter * RainbowParenthesesToggle
-set t_Co=256
-" let base16colorspace=256
+" au VimEnter * RainbowParenthesesToggle
 set background=light
 colorscheme one
 set number
 syntax on
 
 "set nowrap
+set t_Co=256
 set tabstop=2
 set shiftwidth=2
 set autoindent
