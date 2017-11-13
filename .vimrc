@@ -16,6 +16,8 @@ Plugin 'grep.vim'
 
 Plugin 'kien/rainbow_parentheses.vim'
 
+Plugin 'flazz/vim-colorschemes'
+
 Plugin 'guns/vim-clojure-static'
 
 Plugin 'scrooloose/nerdcommenter'
@@ -70,8 +72,8 @@ filetype plugin indent on    " required
 au VimEnter * RainbowParenthesesToggle
 set t_Co=256
 " let base16colorspace=256
-set background=light
-colorscheme one
+"set background=light
+colorscheme Tomorrow-Night
 set number
 syntax on
 
@@ -92,7 +94,7 @@ map <C-n> :NERDTreeToggle<CR>
 let filetype_m='matlab'
 
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='one'
+"let g:airline_theme='one'
 
 set laststatus=2
 
@@ -105,10 +107,11 @@ set nolist
 let g:paredit_shortmaps = 1
 let mapleader = ','
 
-autocmd filetype crontab setlocal nobackup nowritebackup
+"autocmd filetype crontab setlocal nobackup nowritebackup
 
 set exrc
 set secure
+set mouse=a
 
 if has('nvim')
 	map <C-o> :tabe<CR> :terminal<CR>
