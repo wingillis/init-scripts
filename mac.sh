@@ -16,13 +16,14 @@ orchestraServer="wg41@transfer.orchestra.med.harvard.edu"
 o2server="wg41@transfer.rc.hms.harvard.edu"
 export neurobioServer="${orchestraServer}:/files/Neurobio/DattaLab/win/"
 export groupsFolder="${orchestraServer}:/groups/datta/win/"
-export groups2="${o2server}:/n/groups/datta/win/"
+export groups2="${o2server}:/n/groups/datta/"
 export groupsDatta="${orchestraServer}:/groups/datta/"
 export groupsJeff="${orchestraServer}:/groups/datta/Jeff/"
 alias mountneurobio="sshfs ${neurobioServer} neuro/"
 alias mountgroup="sshfs ${groupsFolder} neuro/"
 alias mountgroup2="sshfs ${groups2} neuro/"
 alias mountjeff="sshfs ${groupsJeff} neuro/"
+alias mounto2="sshfs $o2server:/home/wg41/ neuro/"
 alias fumount="umount -f"
 
 function cl {
@@ -32,6 +33,7 @@ function cl {
 }
 
 alias matgraph="matlab -nodesktop -nosplash"
+alias subl='open -a "Sublime Text"'
 
 # make bash use vi keybindings
 set -o vi

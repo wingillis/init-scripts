@@ -16,6 +16,8 @@ Plugin 'grep.vim'
 
 Plugin 'kien/rainbow_parentheses.vim'
 
+Plugin 'flazz/vim-colorschemes'
+
 Plugin 'guns/vim-clojure-static'
 
 Plugin 'scrooloose/nerdcommenter'
@@ -71,9 +73,9 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " au VimEnter * RainbowParenthesesToggle
 set t_Co=256
-let base16colorspace=256
-set background=dark
-colorscheme embers
+" let base16colorspace=256
+"set background=light
+colorscheme Tomorrow-Night
 set number
 syntax on
 
@@ -110,10 +112,11 @@ set nolist
 let g:paredit_shortmaps = 1
 let mapleader = ','
 
-autocmd filetype crontab setlocal nobackup nowritebackup
+"autocmd filetype crontab setlocal nobackup nowritebackup
 
 set exrc
 set secure
+set mouse=a
 
 if has('nvim')
 	map <C-o> :tabe<CR> :terminal<CR>
