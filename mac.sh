@@ -34,6 +34,7 @@ function cl {
 
 alias matgraph="matlab -nodesktop -nosplash"
 alias subl='open -a "Sublime Text"'
+alias py3='source activate py3'
 
 # make bash use vi keybindings
 set -o vi
