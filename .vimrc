@@ -24,13 +24,11 @@ Plugin 'scrooloose/nerdcommenter'
 
 Plugin 'tpope/vim-fireplace'
 
-" Plugin 'chriskempson/base16-vim'
-
-Plugin 'Soares/base16.nvim'
+"Plugin 'chriskempson/base16-vim'
 
 Plugin 'vim-scripts/paredit.vim'
 
-Plugin 'JuliaEditorSupport/julia-vim'
+"Plugin 'JuliaEditorSupport/julia-vim'
 
 Plugin 'scrooloose/nerdtree'
 
@@ -44,19 +42,19 @@ Plugin 'vim-airline/vim-airline-themes'
 
 Plugin 'scrooloose/syntastic'
 
-Plugin 'posva/vim-vue'
+"Plugin 'posva/vim-vue'
 
 " Plugin 'valloric/youcompleteme'
 
-Plugin 'othree/yajs.vim'
+"Plugin 'othree/yajs.vim'
 
-Plugin 'digitaltoad/vim-pug'
+"Plugin 'digitaltoad/vim-pug'
 
 Plugin 'jvirtanen/vim-octave'
 
 Plugin 'ervandew/supertab'
 
-Plugin 'rakr/vim-one'
+"Plugin 'rakr/vim-one'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -74,7 +72,7 @@ filetype plugin indent on    " required
 " au VimEnter * RainbowParenthesesToggle
 set t_Co=256
 " let base16colorspace=256
-"set background=light
+set background=dark
 colorscheme Tomorrow-Night
 set number
 syntax on
@@ -116,7 +114,7 @@ let mapleader = ','
 
 set exrc
 set secure
-set mouse=a
+"set mouse=a
 
 if has('nvim')
 	map <C-o> :tabe<CR> :terminal<CR>

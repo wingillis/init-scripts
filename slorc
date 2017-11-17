@@ -33,7 +33,7 @@ cmd="ssh"
 
 if [ $x11 ];
 then
-	cmd="${cmd} -Y"
+	cmd="${cmd} -XY"
 fi
 
 if [ $forward ];
