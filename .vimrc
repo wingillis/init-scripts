@@ -119,3 +119,6 @@ set secure
 if has('nvim')
 	map <C-o> :tabe<CR> :terminal<CR>
 endif
+
+set list
+set listchars=tab:\|•
