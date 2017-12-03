@@ -14,8 +14,9 @@ if ! [ -z $ECOMMONS_ID ]; then
 fi
 harvard="rc.hms.harvard.edu"
 shell="zsh"
+comm=""
 
-while getopts 'n:xfu:s:vp:l:' flag; do
+while getopts 'n:xfu:s:vp:l:c:' flag; do
 	case "${flag}" in
 		n) node="${OPTARG}";;
 		x) x11=true;;
@@ -25,6 +26,7 @@ while getopts 'n:xfu:s:vp:l:' flag; do
 		v) verbose=true;;
 		l) login="${OPTARG}";;
 		p) port="${OPTARG}";;
+		c) comm="${OPTARG}";;
 		*) echo "fuck you asshole. Wrong arguments";;
 	esac
 done
@@ -46,7 +48,11 @@ then
 	login="${node}.o2"
 fi
 
-cmd="${cmd} ${user}@${login}.${harvard} -t '${shell} -i'"
+if [[ -z "$comm" ]]; then
+	comm="${shell} -i"
+fi
+
+cmd="${cmd} ${user}@${login}.${harvard} -t '${comm}'"
 
 if [ $verbose ]; then
 	echo "${cmd}"
