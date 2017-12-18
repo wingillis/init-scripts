@@ -1,6 +1,12 @@
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+user="wg41"
+
+if ! [ -z $ECOMMONS_ID ]; then
+	user=$ECOMMONS_ID
+fi
+
 # added by Anaconda3 2.3.0 installer
 if [[ -d ~/pyrun && $(uname) = "Darwin" ]]
 then
@@ -10,10 +16,10 @@ then
 fi
 
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
-alias matterm="matlab -nodesktop -nosplash"
+alias matterm="matlab -nodisplay -nodesktop -nosplash"
 
-orchestraServer="wg41@transfer.orchestra.med.harvard.edu"
-export o2server="wg41@transfer.rc.hms.harvard.edu"
+orchestraServer="${user}@transfer.orchestra.med.harvard.edu"
+export o2server="${user}@transfer.rc.hms.harvard.edu"
 export neurobioServer="${orchestraServer}:/files/Neurobio/DattaLab/win/"
 export groupsFolder="${orchestraServer}:/groups/datta/win/"
 export groups2="${o2server}:/n/groups/datta/"
