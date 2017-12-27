@@ -98,4 +98,4 @@ bindkey "^[[B" history-substring-search-down
 # bindkey -M vicmd "j" down-line-or-beginning-search
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
-export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode
+export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
