@@ -85,9 +85,8 @@ export EDITOR='nvim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-export PATH="/Users/wgillis/anaconda2/bin:$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
+export PATH="$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
 
-# . "${HOME}/dev/init-scripts/mac.sh"
 source ~/.bash_profile # this sources mac.sh
 autoload -U promptinit; promptinit
 prompt pure
@@ -99,3 +98,6 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
+export GOPATH="${HOME}/dev/go"
+alias curcommit="git rev-parse HEAD | cut -c1-7"
+alias copycommit="curcommit | pbcopy"
