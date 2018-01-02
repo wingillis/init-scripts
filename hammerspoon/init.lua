@@ -15,7 +15,6 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "H", function()
 end)
 
 hs.hotkey.bind({"ctrl", "alt"}, "m", function()
-  local mouse = hs.mouse.getAbsolutePosition()
   local mouseScreen = hs.mouse.getCurrentScreen()
   local screens = hs.screen.allScreens()
   if mouseScreen == screens[1] then
@@ -136,6 +135,7 @@ for k,v in pairs(transferMap) do
   newMap[table.concat(key, '')] = v
 end
 
+newBoardStarted = false
 transferMap = newMap
 currChar = nil
 
@@ -143,21 +143,20 @@ keysDown = {
   q=false, w=false, e=false, r=false, c=false,
   n=false, u=false, i=false, o=false, p=false
 }
+keysToAdd = {}
 typing = false
 
-typingTimer = hs.timer.delayed.new(0.008, function ()
+typingTimer = hs.timer.delayed.new(0.002, function ()
   typing = false
   currChar = nil
 end)
 
 keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
-  if next(keysDown) ~= nil then
-    local keys = {}
-    for k,v in pairs(keysDown) do
-      if v then
-        table.insert(keys, k)
-      end
-    end
+  if next(keysToAdd) ~= nil then
+  	local keys = {}
+  	for k, v in pairs(keysToAdd) do
+  		table.insert(keys, k)
+		end
     table.sort(keys)
     local keycombo = table.concat(keys, '')
     local result = transferMap[keycombo]
@@ -165,9 +164,13 @@ keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
       typing = true
       typingTimer:start()
       currChar = result
-      hs.eventtap.keyStroke({}, result, 5000);
+      hs.eventtap.keyStroke({}, result, 1000);
+    elseif keycombo == 'pq' then
+    	typing = true
+      hs.eventtap.keyStroke({'ctrl', 'alt'}, 'Space', 1000)
     end
   end
+  keysToAdd = {}
   timerOn = false
 end)
 
@@ -181,10 +184,18 @@ tapWatcher = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
   else
     if keysDown[evtChar] ~= nil then
       keysDown[evtChar] = true
+      if keysToAdd[evtChar] == nil then
+      	keysToAdd[evtChar] = true
+			end
     end
     if timerOn == false then
       timerOn = true
       keyNotifyTimer:start()
+      for k, v in pairs(keysDown) do
+      	if v and keysToAdd[k] == nil then
+      		keysToAdd[k] = true
+				end
+			end
     end
     return true
   end
@@ -198,8 +209,12 @@ tapUpWatcher = hs.eventtap.new({hs.eventtap.event.types.keyUp}, function(evt)
   return false
 end)
 
-hs.hotkey.bind({"ctrl", "alt"}, "Space", function() 
-	tapWatcher:start() 
-	tapUpWatcher:start()
+hs.hotkey.bind({"ctrl", "alt"}, "Space", function()
+  if newBoardStarted then
+    tapWatcher:stop()
+	  tapUpWatcher:stop()
+  else
+  	tapWatcher:start()
+  	tapUpWatcher:start()
+  end
 end)
-
