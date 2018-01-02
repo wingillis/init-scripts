@@ -51,7 +51,7 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode zsh-syntax-highlighting history-substring-search)
+plugins=(git vi-mode zsh-syntax-highlighting history-substring-search osx)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,3 +99,4 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
+export GOPATH="$HOME/dev/go"
