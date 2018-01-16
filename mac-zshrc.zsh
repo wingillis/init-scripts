@@ -100,3 +100,7 @@ bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
 export GOPATH="$HOME/dev/go"
+
+function commit_diff {
+	git --no-pager diff --stat ${1}^1 ${1}
+}
