@@ -8,3 +8,7 @@ addpath(genpath('/home/wg41/code/hifiber'));
 addpath(genpath('/home/wg41/code/schfigure'));
 addpath(genpath('/home/wg41/code/nacc-photometry'));
 addpath(genpath('/home/wg41/code/phanalysis'));
+addpath(genpath('/home/wg41/code/Colormaps'));
+addpath('/home/wg41/code/figure-control');
+addpath(genpath('/home/wg41/code/dls-function-analysis'));
+addpath('/home/wg41/code/matlab');
