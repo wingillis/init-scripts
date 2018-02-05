@@ -160,7 +160,7 @@ typing = false
 
 typingTimer = hs.timer.delayed.new(0.002, function ()
   typing = false
-  currChar = nil
+  -- currChar = nil
 end)
 
 keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
@@ -177,9 +177,6 @@ keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
       typingTimer:start()
       -- currChar = result
       result()
-    -- elseif keycombo == 'pq' then
-    -- 	typing = true
-    --   hs.eventtap.keyStroke({'ctrl', 'alt'}, 'Space', 1000)
     end
   end
   keysToAdd = {}
@@ -230,5 +227,9 @@ hs.hotkey.bind({"ctrl", "alt"}, "Space", function()
   	tapWatcher:start()
   	tapUpWatcher:start()
   	newBoardStarted = true
+    for k,v in pairs(keysDown) do
+      keysDown[k] = false
+    end
+    keysToAdd = {}
   end
 end)

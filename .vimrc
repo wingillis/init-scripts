@@ -40,7 +40,7 @@ Plugin 'vim-airline/vim-airline'
 
 Plugin 'vim-airline/vim-airline-themes'
 
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 
 "Plugin 'posva/vim-vue'
 
@@ -55,6 +55,9 @@ Plugin 'jvirtanen/vim-octave'
 Plugin 'ervandew/supertab'
 
 "Plugin 'rakr/vim-one'
+
+Plugin 'neomake/neomake'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
