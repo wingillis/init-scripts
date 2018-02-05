@@ -104,6 +104,7 @@ export LD_LIBRARY_PATH="/home/wg41/lib"
 export TERM=xterm-256color
 
 module load matlab/2017b
+module load git/2.9.5
 
 alias matterm="matlab -nodesktop -nodisplay -nosplash"
 alias txa='tmux a -t win'

@@ -99,5 +99,10 @@ bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
 export GOPATH="${HOME}/dev/go"
+
 alias curcommit="git rev-parse HEAD | cut -c1-7"
 alias copycommit="curcommit | pbcopy"
+
+function commit_diff {
+	git --no-pager diff --stat ${1}^1 ${1}
+}
