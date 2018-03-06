@@ -65,9 +65,6 @@ source $ZSH/oh-my-zsh.sh
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 export EDITOR='nvim'
-# else
-#   export EDITOR='mvim'
-# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -86,6 +83,7 @@ export EDITOR='nvim'
 #
 
 export PATH="$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
+export PATH="$PATH:$HOME/dev/go/bin"
 
 source ~/.bash_profile # this sources mac.sh
 autoload -U promptinit; promptinit
@@ -106,3 +104,9 @@ alias copycommit="curcommit | pbcopy"
 function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
 }
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
