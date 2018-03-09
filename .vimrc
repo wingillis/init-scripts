@@ -169,3 +169,6 @@ function ToggleWrap()
   endif
 endfunction
 
+hi Search guibg=black guifg=#777777
+hi Cursor guifg=#bbbbbb guibg=#729FC2
+hi iCursor guibg=#729FC2 guifg=#bbbbbb
