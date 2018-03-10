@@ -62,6 +62,18 @@ Plugin 'neomake/neomake'
 
 Plugin 'majutsushi/tagbar'
 
+" These are the new colorschemes I like that I should use
+" moonscape SUX
+Plugin 'Drogglbecher/vim-moonscape'
+" carbonized-dark
+Plugin 'nightsense/carbonized'
+
+Plugin 'beigebrucewayne/skull-vim'
+
+Plugin 'hauleth/blame.vim'
+" stellarized_dark
+Plugin 'nightsense/stellarized'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -80,12 +92,11 @@ filetype plugin indent on    " required
 set t_Co=256
 " let base16colorspace=256
 set background=dark
-colorscheme Tomorrow-Night
-set number
+set termguicolors
+colorscheme skull
 syntax on
 
 "set nowrap
-set termguicolors
 set tabstop=2
 set shiftwidth=2
 set autoindent
@@ -95,6 +106,12 @@ set showmatch
 set hlsearch
 set ignorecase
 set smarttab
+set number
+set wrap
+set linebreak
+set nolist
+set laststatus=2
+
 
 nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
@@ -104,15 +121,11 @@ let filetype_m='matlab'
 let g:syntastic_disabled_filetypes=['py']
 let g:airline#extensions#tabline#enabled = 1
 let g:base16_airline=1
-" let g:airline_theme='one'
+"let g:airline_theme='one'
 
-set laststatus=2
 
 nmap <C-h> :nohlsearch<CR>
 
-set wrap
-set linebreak
-set nolist
 
 let g:paredit_shortmaps = 1
 let mapleader = ','
@@ -169,6 +182,8 @@ function ToggleWrap()
   endif
 endfunction
 
-hi Search guibg=black guifg=#777777
+hi Search guibg=#2c2c2c guifg=#838383
 hi Cursor guifg=#bbbbbb guibg=#729FC2
 hi iCursor guibg=#729FC2 guifg=#bbbbbb
+
+let g:spacegray_low_contrast = 1
