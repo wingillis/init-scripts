@@ -74,6 +74,8 @@ Plugin 'hauleth/blame.vim'
 " stellarized_dark
 Plugin 'nightsense/stellarized'
 
+Plugin 'wingillis/skwull-vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -93,7 +95,7 @@ set t_Co=256
 " let base16colorspace=256
 set background=dark
 set termguicolors
-colorscheme skull
+colorscheme skwull
 syntax on
 
 "set nowrap
