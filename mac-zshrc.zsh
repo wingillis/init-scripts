@@ -65,9 +65,6 @@ source $ZSH/oh-my-zsh.sh
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 export EDITOR='nvim'
-# else
-#   export EDITOR='mvim'
-# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -85,9 +82,9 @@ export EDITOR='nvim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-export PATH="/Users/wgillis/anaconda2/bin:$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
+export PATH="$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
+export PATH="$PATH:$HOME/dev/go/bin"
 
-# . "${HOME}/dev/init-scripts/mac.sh"
 source ~/.bash_profile # this sources mac.sh
 autoload -U promptinit; promptinit
 prompt pure
@@ -99,4 +96,17 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
-export GOPATH="$HOME/dev/go"
+export GOPATH="${HOME}/dev/go"
+
+alias curcommit="git rev-parse HEAD | cut -c1-7"
+alias copycommit="curcommit | pbcopy"
+
+function commit_diff {
+	git --no-pager diff --stat ${1}^1 ${1}
+}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc'; fi

@@ -1,5 +1,6 @@
 
 Vim = require('vim_bindings')
+-- Vim = require('vim')
 
 local v = Vim:new()
 -- v:setDebug(true) -- uncomment this if you want some things printed to the hammerspoon console
@@ -90,6 +91,12 @@ end
 
 -- hs.hotkey.bind({"ctrl", "alt"}, "Space", command_chooser)
 
+local keyStrokeFactory = function (mods, key)
+	return function ()
+		hs.eventtap.keyStroke(mods, key, 1000)
+	end
+end
+
 transferMap = {
   q='s',
   w='i',
@@ -117,12 +124,13 @@ transferMap = {
   oe='u',
   ci='v',
   eu='w',
-  en='v',
+  en='x',
   wp='y',
   ep='z',
   re=hs.keycodes.map['return'],
   op=hs.keycodes.map['forwarddelete'],
-  nw='?'
+  nw={'shift', '/'}, -- == '?'
+	qp={{'ctrl', 'alt'}, hs.keycodes.map['space']}
 }
 
 local newMap = {}
@@ -131,7 +139,12 @@ for k,v in pairs(transferMap) do
   local key = {}
   k:gsub(".", function(c) table.insert(key, c) end)
   table.sort(key)
-  newMap[table.concat(key, '')] = v
+  local newKey = table.concat(key, '')
+  if type(v) == 'table' then
+  	newMap[newKey] = keyStrokeFactory(v[1], v[2])
+	else
+  	newMap[newKey] = keyStrokeFactory({}, v)
+	end
 end
 
 newBoardStarted = false
@@ -147,7 +160,7 @@ typing = false
 
 typingTimer = hs.timer.delayed.new(0.002, function ()
   typing = false
-  currChar = nil
+  -- currChar = nil
 end)
 
 keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
@@ -162,11 +175,8 @@ keyNotifyTimer = hs.timer.delayed.new(0.08, function ()
     if result ~= nil then
       typing = true
       typingTimer:start()
-      currChar = result
-      hs.eventtap.keyStroke({}, result, 1000);
-    elseif keycombo == 'pq' then
-    	typing = true
-      hs.eventtap.keyStroke({'ctrl', 'alt'}, 'Space', 1000)
+      -- currChar = result
+      result()
     end
   end
   keysToAdd = {}
@@ -178,7 +188,7 @@ timerOn = false
 
 tapWatcher = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(evt)
   local evtChar = evt:getCharacters()
-  if typing then
+  if typing and keysDown[evtChar] ~= true then
     return false
   else
     if keysDown[evtChar] ~= nil then
@@ -212,8 +222,14 @@ hs.hotkey.bind({"ctrl", "alt"}, "Space", function()
   if newBoardStarted then
     tapWatcher:stop()
 	  tapUpWatcher:stop()
+	  newBoardStarted = false
   else
   	tapWatcher:start()
   	tapUpWatcher:start()
+  	newBoardStarted = true
+    for k,v in pairs(keysDown) do
+      keysDown[k] = false
+    end
+    keysToAdd = {}
   end
 end)
