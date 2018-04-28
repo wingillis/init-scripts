@@ -60,7 +60,7 @@ ZSH_THEME="cloud"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git vi-mode zsh-autosuggestions)
-plugins=(git vi-mode history-substring-search)
+plugins=(git vi-mode history-substring-search zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -73,7 +73,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-export EDITOR='vim'
+export EDITOR='nvim'
 # else
 #   export EDITOR='mvim'
 # fi
@@ -134,6 +134,14 @@ bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
 alias m2="source activate m2"
+
+ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=white,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
+
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/path.zsh.inc'; fi
