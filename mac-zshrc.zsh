@@ -105,6 +105,12 @@ function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
 }
 
+ZSH_HIGHLIGHT_STYLES[command]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan'
+
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/path.zsh.inc'; fi
 
