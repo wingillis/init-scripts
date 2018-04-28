@@ -119,7 +119,11 @@ export photometry="/n/groups/datta/win/photometry/"
 export jworkspace="/n/groups/datta/Jeff/workspace/"
 export grin="/n/groups/datta/Jeff/workspace/1pimaging_dls"
 export PATH="$PATH:/home/wg41/code/kinect-extraction/bash/:/home/wg41/neovim/bin"
+export GOROOT=$HOME/bin/go/go
+export PATH="$PATH:$GOROOT/bin"
 export MATLABPATH="$HOME/code/matlab"
+export GOPATH=$HOME/code/go
+export PATH=$PATH:$GOPATH/bin
 
 export JUPYTER_RUNTIME_DIR="~/.jupyter-runtime"
 export JUPYTER_CONFIG_DIR="~/.jupyter_config"
@@ -129,3 +133,10 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
+alias m2="source activate m2"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc'; fi
