@@ -106,7 +106,7 @@ function commit_diff {
 }
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
