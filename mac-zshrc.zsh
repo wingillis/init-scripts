@@ -109,6 +109,8 @@ ZSH_HIGHLIGHT_STYLES[command]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=white,bold'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
 
 # The next line updates PATH for the Google Cloud SDK.
