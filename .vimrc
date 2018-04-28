@@ -11,7 +11,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugin 'vim-scripts/matlab.vim'
-"
+
 Plugin 'junegunn/goyo.vim'
 
 Plugin 'grep.vim'
