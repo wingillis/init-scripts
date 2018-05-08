@@ -18,18 +18,10 @@ fi
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 alias matterm="matlab -nodisplay -nodesktop -nosplash"
 
-orchestraServer="${user}@transfer.orchestra.med.harvard.edu"
+#orchestraServer="${user}@transfer.orchestra.med.harvard.edu"
 export o2server="${user}@transfer.rc.hms.harvard.edu"
-export neurobioServer="${orchestraServer}:/files/Neurobio/DattaLab/win/"
-export groupsFolder="${orchestraServer}:/groups/datta/win/"
-export groups2="${o2server}:/n/groups/datta/"
-export groupsDatta="${orchestraServer}:/groups/datta/"
-export groupsJeff="${orchestraServer}:/groups/datta/Jeff/"
-alias mountneurobio="sshfs ${neurobioServer} $HOME/neuro/"
-alias mountgroup="sshfs ${groupsFolder} $HOME/neuro/"
-alias mountgroup2="sshfs ${groups2} $HOME/groups/"
-alias mountjeff="sshfs ${groupsJeff} $HOME/neuro/"
-alias mounto2="sshfs $o2server:/home/wg41/ $HOME/neuro/"
+alias mountgroup2="sshfs ${o2server}:/n/groups/datta/ $HOME/groups/"
+alias mounto2="sshfs ${o2server}:/home/wg41/ $HOME/neuro/"
 alias fumount="umount -f"
 
 function cl {
