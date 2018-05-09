@@ -11,6 +11,7 @@ git clone https://github.com/dattalab/moseq2-extract.git
 git clone https://github.com/dattalab/moseq2-pca.git
 git clone https://github.com/dattalab/moseq2-model.git
 git clone https://github.com/dattalab/moseq2-batch.git
+git clone https://github.com/dattalab/moseq2-viz.git
 
 cd $HOME
 bash miniconda3_latest.sh -b -p $HOME/miniconda3
@@ -23,5 +24,6 @@ pip install -e dev/moseq2-extract
 pip install -e dev/moseq2-pca
 pip install -e dev/moseq2-model --process-dependency-links
 pip install -e dev/moseq2-batch
+pip install -e dev/moseq2-viz
 
 gsutil -m cp -r gs://datta-shared-data/realsense $HOME/data/
