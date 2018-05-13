@@ -27,3 +27,7 @@ pip install -e dev/moseq2-batch
 pip install -e dev/moseq2-viz
 
 gsutil -m cp -r gs://datta-shared-data/realsense $HOME/data/
+
+git config --global user.email "win.gillis@gmail.com"
+git config --global user.name "Winthrop Gillis"
+

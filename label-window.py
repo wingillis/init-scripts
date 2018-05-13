@@ -2,12 +2,14 @@
 import tkinter as tk
 import sys
 
-class FloatingWindow(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-        self.overrideredirect(True)
+class FloatingWindow(tk.Frame):
+    def __init__(self, master=None):
+        self.master = master
+        super().__init__(master)
+        self.master.overrideredirect(True)
+        # self.overrideredirect(True)
 
-        self.label = tk.Label(self, text=sys.argv[1], font=('System', 60))
+        self.label = tk.Label(master, text=sys.argv[1], font=('System', 60))
         self.label.pack(fill="both", expand=True)
 
         self.label.bind("<ButtonPress-1>", self.StartMove)
@@ -27,7 +29,8 @@ class FloatingWindow(tk.Tk):
         deltay = event.y - self.y
         x = self.winfo_x() + deltax
         y = self.winfo_y() + deltay
-        self.geometry("+%s+%s" % (x, y))
+        self.master.geometry("+%s+%s" % (x, y))
 
-app=FloatingWindow()
+root = tk.Tk()
+app=FloatingWindow(master=root)
 app.mainloop()
