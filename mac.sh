@@ -7,14 +7,16 @@ if ! [ -z $ECOMMONS_ID ]; then
 	user=$ECOMMONS_ID
 fi
 
-# added by Anaconda3 2.3.0 installer
 if [[ -d ~/pyrun && $(uname) = "Darwin" ]]
 then
   export PATH="$PATH:~/pyrun:~/pyimport:~/Documents/MATLAB/birds/py"
   export pybirds="/Users/wgillis/Documents/MATLAB/birds/py"
-  alias matlab="/Applications/MATLAB_R201[67][ab].app/bin/matlab"
 fi
 
+if [[ $(uname) = "Darwin" ]]; then
+	alias matlab="/Applications/MATLAB_R2018a.app/bin/matlab"
+	# alias matlab="/Applications/MATLAB_R201[9876][ab].app/bin/matlab"
+fi
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 alias matterm="matlab -nodisplay -nodesktop -nosplash"
 
