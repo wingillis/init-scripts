@@ -153,9 +153,9 @@ grid.linestyle: '-'
 grid.linewidth: 0.8
 hatch.color: k
 hatch.linewidth: 1.0
-hist.bins: 10
+hist.bins: 20
 image.aspect: auto
-image.cmap: viridis
+image.cmap: magma
 image.composite_image: true
 image.interpolation: nearest
 image.lut: 256
