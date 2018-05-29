@@ -118,3 +118,4 @@ if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wg
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/usr/local/opt/node@8/bin:$PATH"
