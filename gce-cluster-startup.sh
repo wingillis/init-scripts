@@ -40,6 +40,6 @@ ln -s $HOME/init-scripts/gce-zshrc.zsh $HOME/.zshrc
 
 echo "exec zsh" >> $HOME/.bash_profile
 
-. $HOME/.bash_profile
-
 sbatch -t 12:00:00 -n 1 -c 8 --mem=30G --wrap "gsutil -m cp -r gs://datta-shared-data/cables-2 $HOME/data/"
+
+. $HOME/.bash_profile
