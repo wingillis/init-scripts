@@ -82,7 +82,7 @@ export EDITOR='vim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-source $HOME/.bash_profile # this sources mac.sh
+# source $HOME/.bash_profile # this sources mac.sh
 # autoload -U promptinit; promptinit
 
 bindkey "^[[A" history-substring-search-up
