@@ -18,7 +18,7 @@ bash miniconda3_latest.sh -b -p $HOME/miniconda3
 
 echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 
-source $HOME/.bashrc
+. $HOME/.bashrc
 
 pip install -e dev/moseq2-extract
 pip install -e dev/moseq2-pca
@@ -31,3 +31,8 @@ gsutil -m cp -r gs://datta-shared-data/cables-2 $HOME/data/
 git config --global user.email "win.gillis@gmail.com"
 git config --global user.name "Winthrop Gillis"
 
+chsh -s /bin/zsh
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+ln -s $HOME/init-scripts
