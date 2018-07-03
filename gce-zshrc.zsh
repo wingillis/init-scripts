@@ -98,6 +98,7 @@ function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
 }
 
+ZSH_HIGHLIGHT_HIGHLIGHTER=(main)
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold'
