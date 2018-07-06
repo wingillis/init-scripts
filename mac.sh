@@ -42,4 +42,5 @@ set -o vi
 echo "Welcome Winthrop"
 echo "Vi keybindings now loaded!"
 
-. /Users/wgillis/anaconda2/etc/profile.d/conda.sh
+# export PATH="/Users/wgillis/anaconda/bin/:$PATH"
+. /Users/wgillis/*conda*/etc/profile.d/conda.sh
