@@ -26,6 +26,10 @@ pip install -e dev/moseq2-model --process-dependency-links
 pip install -e dev/moseq2-batch
 pip install -e dev/moseq2-viz
 
+pip install jupyter
+pip install matplotlib
+pip install cython
+
 git config --global user.email "win.gillis@gmail.com"
 git config --global user.name "Winthrop Gillis"
 
