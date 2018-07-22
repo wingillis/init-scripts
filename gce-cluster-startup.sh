@@ -20,6 +20,9 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 
 . $HOME/.bash_profile
 
+# install ffmpeg
+conda install -c conda-forge ffmpeg
+
 pip install -e dev/moseq2-extract
 pip install -e dev/moseq2-pca
 pip install -e dev/moseq2-model --process-dependency-links
