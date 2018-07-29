@@ -44,6 +44,7 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 
 rm $HOME/.zshrc
 ln -s $HOME/init-scripts/gce-zshrc.zsh $HOME/.zshrc
+ln -s $HOME/init-scripts/.tmux.conf $HOME/.tmux.conf
 
 echo "exec zsh" >> $HOME/.bash_profile
 
