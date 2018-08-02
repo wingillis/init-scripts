@@ -13,6 +13,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'vim-scripts/matlab.vim'
 
 Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim'
 
 Plugin 'grep.vim'
 
@@ -101,6 +102,8 @@ set wrap
 set linebreak
 set nolist
 set laststatus=2
+set history=100
+
 
 nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
@@ -153,7 +156,7 @@ function ToggleWrap()
     silent! nunmap <buffer> 0
     silent! nunmap <buffer> $
   else
-    echo "Wrap ON"
+		echo "Wrap ON"
     let g:mywrap=1
     set virtualedit=
     setlocal display+=lastline
@@ -166,17 +169,19 @@ function ToggleWrap()
     noremap  <buffer> <silent> 0 g0
     noremap  <buffer> <silent> $ g$
     inoremap <buffer> <silent> <Up>   <C-o>gk
-    inoremap <buffer> <silent> <Down> <C-o>gj
-    inoremap <buffer> <silent> <Home> <C-o>g<Home>
-    inoremap <buffer> <silent> <End>  <C-o>g<End>
-  endif
+		inoremap <buffer> <silent> <Down> <C-o>gj
+		inoremap <buffer> <silent> <Home> <C-o>g<Home>
+		inoremap <buffer> <silent> <End>  <C-o>g<End>
+	endif
 endfunction
 
 function g:ToggleScheme()
 	if g:colors_name == 'Tomorrow'
+		set background=dark
 		colorscheme carbonized-dark
-		AirlineTheme bubblegum 
+		AirlineTheme bubblegum
 	else
+		set background=light
 		colorscheme Tomorrow
 		AirlineTheme light
 	endif
@@ -189,3 +194,4 @@ let g:auto_save_events = ["InsertLeave", "TextChanged"]
 "hi Cursor guifg=#bbbbbb guibg=#729FC2
 "hi iCursor guibg=#729FC2 guifg=#bbbbbb
 
+autocmd VimEnter * :AirlineRefresh
