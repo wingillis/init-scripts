@@ -172,14 +172,13 @@ function ToggleWrap()
   endif
 endfunction
 
-function ToggleScheme()
+function g:ToggleScheme()
 	if g:colors_name == 'Tomorrow'
 		colorscheme carbonized-dark
-		let g:airline_theme='bubblegum'
+		AirlineTheme bubblegum 
 	else
 		colorscheme Tomorrow
-		"let g:airline_theme='light'
-		:AirlineTheme light
+		AirlineTheme light
 	endif
 endfunction
 
