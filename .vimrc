@@ -10,8 +10,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" Plugin 'vim-scripts/matlab.vim'
-
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/limelight.vim'
 
@@ -34,7 +32,7 @@ Plugin 'vim-scripts/paredit.vim'
 Plugin 'scrooloose/nerdtree'
 
 Plugin 'tpope/vim-fugitive'
-
+Plugin 'reedes/vim-pencil'
 Plugin 'tpope/vim-surround'
 
 Plugin 'vim-airline/vim-airline'
@@ -136,6 +134,7 @@ set listchars=tab:\|•
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
 noremap <silent> <Leader>s :call ToggleScheme()<CR>
+nnoremap <silent> <Leader>pn :call StartPencil()<CR>
 
 let g:mywrap=0
 function ToggleWrap()
@@ -184,6 +183,18 @@ function g:ToggleScheme()
 		set background=light
 		colorscheme Tomorrow
 		AirlineTheme light
+	endif
+endfunction
+
+function g:StartPencil()
+	if PencilMode() == ''
+		SoftPencil
+		set nonumber
+		set foldcolumn=2
+	else
+		NoPencil
+		set number
+		set foldcolumn=0
 	endif
 endfunction
 
