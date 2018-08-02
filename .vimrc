@@ -26,11 +26,9 @@ Plugin 'scrooloose/nerdcommenter'
 
 Plugin 'tpope/vim-fireplace'
 
-"Plugin 'chriskempson/base16-vim'
+Plugin '907th/vim-auto-save'
 
 Plugin 'vim-scripts/paredit.vim'
-
-"Plugin 'JuliaEditorSupport/julia-vim'
 
 Plugin 'scrooloose/nerdtree'
 
@@ -44,27 +42,18 @@ Plugin 'vim-airline/vim-airline-themes'
 
 " Plugin 'scrooloose/syntastic'
 
-"Plugin 'posva/vim-vue'
 
 " Plugin 'valloric/youcompleteme'
-
-"Plugin 'othree/yajs.vim'
-
-"Plugin 'digitaltoad/vim-pug'
 
 Plugin 'jvirtanen/vim-octave'
 
 Plugin 'ervandew/supertab'
-
-"Plugin 'rakr/vim-one'
 
 Plugin 'neomake/neomake'
 
 Plugin 'majutsushi/tagbar'
 
 " These are the new colorschemes I like that I should use
-" moonscape SUX
-Plugin 'Drogglbecher/vim-moonscape'
 " carbonized-dark
 Plugin 'nightsense/carbonized'
 
@@ -92,13 +81,12 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " au VimEnter * RainbowParenthesesToggle
 set t_Co=256
-" let base16colorspace=256
+"let base16colorspace=256
 set background=dark
 set termguicolors
-colorscheme skwull
+colorscheme Tomorrow
 syntax on
 
-"set nowrap
 set tabstop=2
 set shiftwidth=2
 set autoindent
@@ -114,25 +102,23 @@ set linebreak
 set nolist
 set laststatus=2
 
-
 nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
 
 let filetype_m='matlab'
 
-let g:syntastic_disabled_filetypes=['py']
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
-let g:base16_airline=1
-"let g:airline_theme='one'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='light'
 
+let g:syntastic_disabled_filetypes=['py']
 
 nmap <C-h> :nohlsearch<CR>
 
-
 let g:paredit_shortmaps = 1
 let mapleader = ','
-
-"autocmd filetype crontab setlocal nobackup nowritebackup
 
 set exrc
 set secure
@@ -146,6 +132,8 @@ set list
 set listchars=tab:\|•
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
+noremap <silent> <Leader>s :call ToggleScheme()<CR>
+
 let g:mywrap=0
 function ToggleWrap()
   if g:mywrap
@@ -184,8 +172,21 @@ function ToggleWrap()
   endif
 endfunction
 
-hi Search guibg=#2c2c2c guifg=#838383
-hi Cursor guifg=#bbbbbb guibg=#729FC2
-hi iCursor guibg=#729FC2 guifg=#bbbbbb
+function ToggleScheme()
+	if g:colors_name == 'Tomorrow'
+		colorscheme carbonized-dark
+		let g:airline_theme='bubblegum'
+	else
+		colorscheme Tomorrow
+		"let g:airline_theme='light'
+		:AirlineTheme light
+	endif
+endfunction
 
-let g:spacegray_low_contrast = 1
+let g:auto_save = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged"]
+
+"hi Search guibg=#2c2c2c guifg=#838383
+"hi Cursor guifg=#bbbbbb guibg=#729FC2
+"hi iCursor guibg=#729FC2 guifg=#bbbbbb
+
