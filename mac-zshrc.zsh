@@ -100,6 +100,8 @@ export GOPATH="${HOME}/dev/go"
 
 alias curcommit="git rev-parse HEAD | cut -c1-7"
 alias copycommit="curcommit | pbcopy"
+alias db-paper="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=\"https://paper.dropbox.com/\""
+alias mouse-sheet="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=\"https://docs.google.com/spreadsheets/d/12rA4RhtUTtdAZEwEzsUYY0JSeCwJ5CvlBRnj-B3oAQ4/edit#gid=490203928\""
 
 function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
@@ -118,3 +120,4 @@ if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wg
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/usr/local/opt/node@8/bin:$PATH"
