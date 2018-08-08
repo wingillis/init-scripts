@@ -6,10 +6,11 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'roxma/nvim-yarp'
+Plugin 'ncm2/ncm2'
 Plugin 'xolox/vim-misc'
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/limelight.vim'
@@ -31,7 +32,7 @@ Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'scrooloose/syntastic'
 " Plugin 'valloric/youcompleteme'
 Plugin 'jvirtanen/vim-octave'
-Plugin 'ervandew/supertab'
+" Plugin 'ervandew/supertab'
 Plugin 'neomake/neomake'
 Plugin 'majutsushi/tagbar'
 " These are the new colorschemes I like that I should use
@@ -156,11 +157,11 @@ endfunction
 
 function g:ToggleScheme()
 	if g:colors_name == 'Tomorrow'
-		set background=dark
+		"set background=dark
 		colorscheme carbonized-dark
 		AirlineTheme bubblegum
 	else
-		set background=light
+		"set background=light
 		colorscheme Tomorrow
 		AirlineTheme light
 	endif
@@ -185,3 +186,19 @@ let g:session_autosave = 'no'
 "hi iCursor guibg=#729FC2 guifg=#bbbbbb
 
 autocmd VimEnter * :AirlineRefresh
+
+set hidden
+
+let g:LanguageClient_serverCommands = {
+	\ 'python': ['/Users/wgillis/anaconda/envs/py3/bin/pyls'],
+	\ }
+" Language client commands
+set completefunc=LanguageClient#complete
+set completeopt=noinsert,menuone,noselect
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" autocomplete tab
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+autocmd BufEnter * call ncm2#enable_for_buffer()
