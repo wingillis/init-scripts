@@ -169,7 +169,7 @@ endfunction
 
 function g:StartPencil()
 	if PencilMode() == ''
-		HardPencil
+		SoftPencil
 		set numberwidth=10
 	else
 		PencilOff

@@ -1,0 +1,20 @@
+{
+    "apputils:activate-command-palette": {
+      "command": "apputils:activate-command-palette",
+      "keys": [
+        "Accel Shift P"
+      ],
+      "selector": "body",
+      "title": "Activate Command Palette",
+      "category": "Main Area"
+    },
+    "filemenu:close-and-cleanup": {
+      "command": "filemenu:close-and-cleanup",
+      "keys": [
+        "Ctrl Shift Q"
+      ],
+      "selector": ".jp-Activity",
+      "title": "Close And shutdown Notebook",
+      "category": "File Operations"
+    }
+}
