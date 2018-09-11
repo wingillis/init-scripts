@@ -1,13 +1,14 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/init-scripts:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/wgillis/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="cloud"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -51,7 +52,7 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode zsh-syntax-highlighting history-substring-search osx)
+plugins=(git vi-mode zsh-syntax-highlighting history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -64,7 +65,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-export EDITOR='nvim'
+export EDITOR='vim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -82,32 +83,23 @@ export EDITOR='nvim'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-export PATH="$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
-export PATH="$PATH:$HOME/dev/go/bin"
-
-source ~/.bash_profile # this sources mac.sh
-autoload -U promptinit; promptinit
-prompt pure
+# source $HOME/.bash_profile # this sources mac.sh
+# autoload -U promptinit; promptinit
 
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
-# bindkey -M vicmd "k" up-line-or-beginning-search
-# bindkey -M vicmd "j" down-line-or-beginning-search
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
-export GOPATH="${HOME}/dev/go"
 
 alias curcommit="git rev-parse HEAD | cut -c1-7"
 alias copycommit="curcommit | pbcopy"
-alias db-paper="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=\"https://paper.dropbox.com/\""
-alias mouse-sheet="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=\"https://docs.google.com/spreadsheets/d/12rA4RhtUTtdAZEwEzsUYY0JSeCwJ5CvlBRnj-B3oAQ4/edit#gid=490203928\""
-alias exp-log="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --app=\"https://docs.google.com/spreadsheets/d/11hMXk72uZEWdZlzjFCiDQVG1dBZuH7zzmCJMrFolZFE/edit#gid=233622843\""
 
 function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
 }
 
+ZSH_HIGHLIGHT_HIGHLIGHTER=(main)
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold'
@@ -115,10 +107,3 @@ ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=white,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/node@8/bin:$PATH"

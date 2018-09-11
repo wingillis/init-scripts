@@ -1,0 +1,13 @@
+axes.facecolor: FFFFFF
+figure.facecolor: FFFFFF
+figure.dpi: 120
+font.size: 12.0
+font.color: black
+image.cmap: magma
+image.aspect: auto
+hist.bins: 20
+legend.frameon: false
+savefig.facecolor: FFFFFF
+savefig.dpi: 300
+
+
