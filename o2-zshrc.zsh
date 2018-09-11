@@ -101,8 +101,7 @@ export PATH="/home/wg41/code/bash/bin:$PATH"
 export PATH="$PATH:/home/wg41/code/"
 export PATH="$PATH:/home/wg41/code/batch-jobs"
 export PATH="/home/wg41/bin:$PATH"
-export LD_LIBRARY_PATH="/home/wg41/lib"
-export TERM=xterm-256color
+export LD_LIBRARY_PATH="$HOME/lib:$HOME/code/bash/lib"
 
 module load matlab/2017b
 module load git/2.9.5
