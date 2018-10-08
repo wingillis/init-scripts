@@ -15,6 +15,7 @@ fi
 
 if [[ $(uname) = "Darwin" ]]; then
 	alias matlab="/Applications/MATLAB_R2018a.app/bin/matlab"
+	. /Users/wgillis/*conda*/etc/profile.d/conda.sh
 	# alias matlab="/Applications/MATLAB_R201[9876][ab].app/bin/matlab"
 fi
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
@@ -43,4 +44,3 @@ echo "Welcome Winthrop"
 echo "Vi keybindings now loaded!"
 
 # export PATH="/Users/wgillis/anaconda/bin/:$PATH"
-. /Users/wgillis/*conda*/etc/profile.d/conda.sh
