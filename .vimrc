@@ -188,9 +188,14 @@ let g:session_autosave = 'no'
 autocmd VimEnter * :AirlineRefresh
 
 set hidden
+if !isdirectory('/Users/wgillis/anaconda')
+	let pylsdir = '/Users/wgillis/anaconda2/envs/py3/bin/pyls'
+else
+	let pylsdir = '/Users/wgillis/anaconda/envs/py3/bin/pyls'
+endif
 
 let g:LanguageClient_serverCommands = {
-	\ 'python': ['/Users/wgillis/anaconda/envs/py3/bin/pyls'],
+	\ 'python': [pylsdir]
 	\ }
 " Language client commands
 set completefunc=LanguageClient#complete

@@ -1,6 +1,7 @@
 {
     "codeCellConfig": {
         "tabSize": 2,
-        "lineNumbers": true
+        "lineNumbers": true,
+        "lineWrap": "on"
     }
 }
