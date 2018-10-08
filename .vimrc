@@ -9,8 +9,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'roxma/nvim-yarp'
-Plugin 'ncm2/ncm2'
+"Plugin 'roxma/nvim-yarp'
+"Plugin 'ncm2/ncm2'
+Plugin 'ajh17/VimCompletesMe'
 Plugin 'xolox/vim-misc'
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/limelight.vim'
@@ -63,7 +64,7 @@ set t_Co=256
 "let base16colorspace=256
 set background=dark
 set termguicolors
-colorscheme Tomorrow
+colorscheme carbonized-dark
 syntax on
 
 set tabstop=2
@@ -92,7 +93,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme='light'
+let g:airline_theme='bubblegum'
 
 let g:syntastic_disabled_filetypes=['py']
 
@@ -194,17 +195,19 @@ else
 	let pylsdir = '/Users/wgillis/anaconda/envs/py3/bin/pyls'
 endif
 
-let g:LanguageClient_serverCommands = {
-	\ 'python': [pylsdir]
-	\ }
+"let g:LanguageClient_serverCommands = {
+"	\ 'python': [pylsdir]
+"	\ }
 " Language client commands
-set completefunc=LanguageClient#complete
-set completeopt=noinsert,menuone,noselect
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+"set completefunc=LanguageClient#complete
+"set completeopt=noinsert,menuone,noselect
+"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+"nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 " autocomplete tab
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-autocmd BufEnter * call ncm2#enable_for_buffer()
-let $TERM='iterm2'
+"autocmd BufEnter * call ncm2#enable_for_buffer()
+let &t_SI.="\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+set timeoutlen=1000 ttimeoutlen=10
