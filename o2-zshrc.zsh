@@ -97,11 +97,11 @@ export neurobio='/files/Neurobio/DattaLab/win'
 export code='/home/wg41/code'
 export inscopix='/n/groups/datta/win/inscopix'
 export PATH="$PATH:/home/wg41/code/bash"
+export PATH="/home/wg41/code/bash/bin:$PATH"
 export PATH="$PATH:/home/wg41/code/"
 export PATH="$PATH:/home/wg41/code/batch-jobs"
 export PATH="/home/wg41/bin:$PATH"
-export LD_LIBRARY_PATH="/home/wg41/lib"
-export TERM=xterm-256color
+export LD_LIBRARY_PATH="$HOME/lib:$HOME/code/bash/lib"
 
 module load matlab/2017b
 module load git/2.9.5
@@ -115,6 +115,7 @@ export neurobio='/files/Neurobio/DattaLab/win'
 export code='/home/wg41/code'
 export inscopix='/n/groups/datta/win/inscopix'
 alias wq="squeue -u wg41"
+alias wql="wq -o \"%.18i %.18j %.2t %.10M\""
 export photometry="/n/groups/datta/win/photometry/"
 export jworkspace="/n/groups/datta/Jeff/workspace/"
 export grin="/n/groups/datta/Jeff/workspace/1pimaging_dls"
@@ -133,7 +134,7 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
-alias m2="source activate m2"
+alias mo2="source activate mo2"
 
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
