@@ -12,15 +12,17 @@ cmd="echo 'there does not seem to be anything here'"
 cpuToggle=""
 cpuFlag="-n"
 verbose=""
+exclude=""
 
 
-while getopts 'im:n:s:xp:ct:v' flag; do
+while getopts 'im:n:s:xp:e:ct:v' flag; do
   case "${flag}" in
     i) interactive=true;;
     m) mem="${OPTARG}";;
     n) ncpu="${OPTARG}";;
 		x) x11=true;;
 		p) partition="${OPTARG}";;
+    e) exclude="${OPTARG}";;
     s) shell="${OPTARG}";;
     c) cpuToggle=true;;
     t) t="${OPTARG}";;
@@ -41,6 +43,10 @@ fi
 
 if [ $x11 ]; then
 	cmd="${cmd} --x11"
+fi
+
+if [[ -n "$exclude" ]]; then
+  cmd="${cmd} --exclude=${exclude}"
 fi
 
 if [ $verbose ]; then
