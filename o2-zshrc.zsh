@@ -153,3 +153,4 @@ if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg4
 if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc'; fi
 
 export NXF_WORK='/n/scratch2/wg41/nextflow'
+export NXF_HOME='$HOME/.nextflow'
