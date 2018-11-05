@@ -125,6 +125,7 @@ export PATH="$PATH:$GOROOT/bin"
 export MATLABPATH="$HOME/code/matlab"
 export GOPATH=$HOME/code/go
 export PATH=$PATH:$GOPATH/bin
+export PATH="$PATH:$HOME/miniconda2/bin"
 
 export JUPYTER_RUNTIME_DIR="~/.jupyter-runtime"
 export JUPYTER_CONFIG_DIR="~/.jupyter_config"
@@ -135,6 +136,7 @@ bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
 alias mo2="source activate mo2"
+alias py3="source activate py3"
 
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
@@ -149,3 +151,5 @@ if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg4
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc'; fi
+
+export NXF_WORK='/n/scratch2/wg41/nextflow'
