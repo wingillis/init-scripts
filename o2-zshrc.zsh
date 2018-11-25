@@ -106,25 +106,26 @@ export LD_LIBRARY_PATH="$HOME/lib:$HOME/code/bash/lib"
 module load matlab/2017b
 module load git/2.9.5
 
+alias tmux="TERM=screen-256color-bce tmux"
 alias matterm="matlab -nodesktop -nodisplay -nosplash"
-alias txa='tmux a -t win'
 alias ta='tmux a -t win'
-alias txnew='tmux new -s win'
 alias tn='tmux new -s win'
 export neurobio='/files/Neurobio/DattaLab/win'
 export code='/home/wg41/code'
 export inscopix='/n/groups/datta/win/inscopix'
 alias wq="squeue -u wg41"
 alias wql="wq -o \"%.18i %.18j %.2t %.10M\""
-export photometry="/n/groups/datta/win/photometry/"
+
 export jworkspace="/n/groups/datta/Jeff/workspace/"
-export grin="/n/groups/datta/Jeff/workspace/1pimaging_dls"
-export PATH="$PATH:/home/wg41/code/kinect-extraction/bash/:/home/wg41/neovim/bin"
-export GOROOT=$HOME/bin/go/go
-export PATH="$PATH:$GOROOT/bin"
-export MATLABPATH="$HOME/code/matlab"
+export grin="/n/groups/datta/win/1pimaging_dls_moseq2"
+export PATH="$PATH:/home/wg41/code/kinect-extraction/bash/"
+
 export GOPATH=$HOME/code/go
 export PATH=$PATH:$GOPATH/bin
+export GOROOT=$HOME/bin/go/go
+export PATH="$PATH:$GOROOT/bin"
+
+export MATLABPATH="$HOME/code/matlab"
 export PATH="$PATH:$HOME/miniconda2/bin"
 
 export JUPYTER_RUNTIME_DIR="~/.jupyter-runtime"
@@ -154,3 +155,4 @@ if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/ho
 
 export NXF_WORK='/n/scratch2/wg41/nextflow'
 export NXF_HOME='$HOME/.nextflow'
+
