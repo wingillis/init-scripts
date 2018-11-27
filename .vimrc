@@ -71,6 +71,7 @@ set copyindent
 set shiftround
 set showmatch
 set hlsearch
+set incsearch
 set ignorecase
 set smarttab
 set number
