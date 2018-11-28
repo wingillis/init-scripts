@@ -88,6 +88,7 @@ nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
 
 let filetype_m='matlab'
+autocmd BufNewFile,BufRead *.nf set syntax=groovy
 
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
