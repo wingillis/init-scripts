@@ -16,6 +16,6 @@ echo -e "\nStarting Jupyter labe on port ${port} on the $(hostname) server."
 echo -e "\nSSH tunnel command: ssh -NL ${port}:localhost:${port} ${USER}@$(hostname)"
 echo -e "\nLocal URI: http://localhost:${port}"
 source activate $1
-JUPYTER_RUNTIME_DIR="/n/groups/datta/win/.jupyter-runtime" jupyter lab --no-browser --port=${port} --ip='*'
+JUPYTER_RUNTIME_DIR="/n/groups/datta/win/.jupyter-runtime" jupyter lab --no-browser --port=${port}
 
 date

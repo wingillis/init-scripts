@@ -102,7 +102,7 @@ export LD_LIBRARY_PATH="$HOME/lib:$HOME/code/bash/lib"
 module load matlab/2017b
 module load git/2.9.5
 
-alias tmux="TERM=screen-256color-bce tmux"
+alias tmux="TERM=screen-256color tmux"
 alias matterm="matlab -nodesktop -nodisplay -nosplash"
 alias ta='tmux a -t win'
 alias tn='tmux new -s win'

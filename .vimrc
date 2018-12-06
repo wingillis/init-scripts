@@ -134,7 +134,8 @@ function g:StartPencil()
 	endif
 endfunction
 
-let g:auto_save = 1
+" turn off autosave
+let g:auto_save = 0
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
 let g:session_autosave = 'no'
 
