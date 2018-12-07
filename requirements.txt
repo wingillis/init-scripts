@@ -1,0 +1,6 @@
+# python packages to install
+cython
+ipython
+jupyterlab
+matplotlib
+
