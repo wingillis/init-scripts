@@ -29,6 +29,7 @@ cd ../moseq2-viz
 git checkout v0.1.2
 
 cd $HOME
+rm -rf miniconda3
 bash miniconda3_latest.sh -b -p $HOME/miniconda3
 
 echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
