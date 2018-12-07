@@ -1,17 +1,32 @@
+cd $HOME
 
 mkdir dev
-mkdir data
+mkdir -p data/1pimaging
 
 # download miniconda
 curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o "$HOME/miniconda3_latest.sh"
 
 cd dev
 
+rm -rf moseq2-extract
+rm -rf moseq2-pca
+rm -rf moseq2-model
+rm -rf moseq2-batch
+rm -rf moseq2-viz
 git clone https://wingillis@github.com/dattalab/moseq2-extract.git
 git clone https://wingillis@github.com/dattalab/moseq2-pca.git
 git clone https://wingillis@github.com/dattalab/moseq2-model.git
 git clone https://wingillis@github.com/dattalab/moseq2-batch.git
 git clone https://wingillis@github.com/dattalab/moseq2-viz.git
+
+cd moseq2-model
+git checkout v0.1.2
+cd ../moseq2-pca
+git checkout v0.1.2
+cd ../moseq2-batch
+git checkout v0.1.2
+cd ../moseq2-viz
+git checkout v0.1.2
 
 cd $HOME
 bash miniconda3_latest.sh -b -p $HOME/miniconda3
@@ -52,6 +67,6 @@ rm $HOME/miniconda3_latest.sh
 
 gcloud auth login
 
-sbatch -t 12:00:00 -n 1 -c 8 --mem=30G --wrap "gsutil -m cp -r gs://datta-shared-data/cables-2 $HOME/data/"
+sbatch -t 12:00:00 -n 1 -c 8 --mem=30G --wrap "gsutil -m cp -r gs://datta-shared-data/1pimaging-vae-modeling $HOME/data/1pimaging"
 
 . $HOME/.bash_profile
