@@ -8,6 +8,10 @@ curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o "$
 
 cd dev
 
+git config --global user.name wingillis
+git config --global user.email "win.gillis@gmail.com"
+git config --global credential.helper credential-cache
+
 rm -rf moseq2-extract
 rm -rf moseq2-pca
 rm -rf moseq2-model
