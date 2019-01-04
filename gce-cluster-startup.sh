@@ -24,7 +24,7 @@ git clone https://wingillis@github.com/dattalab/moseq2-batch.git
 git clone https://wingillis@github.com/dattalab/moseq2-viz.git
 
 cd moseq2-model
-git checkout v0.1.2
+git checkout v0.1.2-save-model-progress
 cd ../moseq2-pca
 git checkout v0.1.2
 cd ../moseq2-batch
@@ -33,6 +33,7 @@ cd ../moseq2-viz
 git checkout v0.1.2
 
 cd $HOME
+rm -rf miniconda3
 bash miniconda3_latest.sh -b -p $HOME/miniconda3
 
 echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
@@ -70,7 +71,5 @@ echo "exec zsh" >> $HOME/.bash_profile
 rm $HOME/miniconda3_latest.sh
 
 gcloud auth login
-
-sbatch -t 12:00:00 -n 1 -c 8 --mem=30G --wrap "gsutil -m cp -r gs://datta-shared-data/1pimaging-vae-modeling $HOME/data/1pimaging"
 
 . $HOME/.bash_profile
