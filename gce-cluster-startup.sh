@@ -43,18 +43,15 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 # install ffmpeg
 conda install -c conda-forge ffmpeg
 
+pip install jupyter
+pip install matplotlib
+pip install cython
+
 pip install -e dev/moseq2-extract
 pip install -e dev/moseq2-pca
 pip install -e dev/moseq2-model --process-dependency-links
 pip install -e dev/moseq2-batch
 pip install -e dev/moseq2-viz
-
-pip install jupyter
-pip install matplotlib
-pip install cython
-
-git config --global user.email "win.gillis@gmail.com"
-git config --global user.name "Winthrop Gillis"
 
 sudo yum install -y zsh
 
