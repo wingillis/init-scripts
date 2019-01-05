@@ -134,6 +134,7 @@ bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
 alias mo2="source activate mo2"
 alias py3="source activate py3"
+alias fairshare="sshare -u $USER -U"
 
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
