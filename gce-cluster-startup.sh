@@ -41,7 +41,7 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 . $HOME/.bash_profile
 
 # install ffmpeg
-conda install -c conda-forge ffmpeg
+conda install -y -c conda-forge ffmpeg
 
 pip install -U pip
 pip install jupyter
