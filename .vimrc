@@ -61,7 +61,7 @@ filetype plugin indent on    " required
 set t_Co=256
 set background=dark
 set termguicolors
-colorscheme carbonized-dark
+colorscheme dracula
 syntax on
 
 set tabstop=2
@@ -115,7 +115,7 @@ nnoremap <silent> <Leader>pn :call StartPencil()<CR>
 function g:ToggleScheme()
 	if g:colors_name == 'Tomorrow'
 		"set background=dark
-		colorscheme carbonized-dark
+		colorscheme dracula
 		AirlineTheme bubblegum
 	else
 		"set background=light
