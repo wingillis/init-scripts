@@ -10,7 +10,7 @@ cd dev
 
 git config --global user.name wingillis
 git config --global user.email "win.gillis@gmail.com"
-git config --global credential.helper credential-cache
+git config --global credential.helper cache
 
 rm -rf moseq2-extract
 rm -rf moseq2-pca
