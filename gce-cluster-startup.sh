@@ -43,6 +43,7 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 # install ffmpeg
 conda install -c conda-forge ffmpeg
 
+pip install -U pip
 pip install jupyter
 pip install matplotlib
 pip install cython
