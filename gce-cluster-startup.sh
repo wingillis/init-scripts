@@ -44,7 +44,7 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 conda install -y -c conda-forge ffmpeg
 
 pip install -U pip
-pip install jupyter
+pip install jupyterlab
 pip install matplotlib
 pip install cython
 
@@ -54,7 +54,7 @@ pip install -e dev/moseq2-model --process-dependency-links
 pip install -e dev/moseq2-batch
 pip install -e dev/moseq2-viz
 
-sudo yum install -y zsh
+sudo yum install -y zsh nodejs
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
@@ -72,5 +72,12 @@ gcloud auth login
 
 git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 ln -s $HOME/init-scripts/.vimrc $HOME/.vimrc
+
+# install jupyterlab extensions
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install @jupyterlab/toc
+jupyter labextension install jupyterlab_vim
+jupyter labextension install @jupyterlab/celltags
+jupyter labextension install @oriolmirosa/jupyterlab_materialdarker
 
 . $HOME/.bash_profile
