@@ -80,4 +80,10 @@ jupyter labextension install jupyterlab_vim
 jupyter labextension install @jupyterlab/celltags
 jupyter labextension install @oriolmirosa/jupyterlab_materialdarker
 
+jupyterconfig="$HOME/.jupyter/lab/user-settings/@jupyterlab/"
+mkdir -p $jupyterconfig/notebook-extension
+ln -s $HOME/init-scripts/jupyterlab-notebook-settings.json $jupyterconfig/notebook-extension/tracker.jupyterlab-settings
+mkdir -p $jupyterconfig/shortcuts-extension
+ln -s $HOME/init-scripts/jupyterlab-keyboard-shortcuts.json $jupyterconfig/shortcuts-extension/plugin.jupyterlab-settings
+
 . $HOME/.bash_profile
