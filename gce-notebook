@@ -1,11 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=jupyter
 #SBATCH --output=jupyter_%j.log
-#SBATCH --partition=short
-#SBATCH -c 8
+#SBATCH --partition=debug
+#SBATCH -c 16
 #SBATCH -n 1
-#SBATCH --mem=55GB
-#SBATCH --time=12:00:00
+#SBATCH --mem=100GB
+#SBATCH --time=2-00:00:00
+
 date;hostname;pwd
 
 unset XDG_RUNTIME_DIR
@@ -15,7 +16,6 @@ port=$(shuf -i 20000-30000 -n 1)
 echo -e "\nStarting Jupyter labe on port ${port} on the $(hostname) server."
 echo -e "\nSSH tunnel command: ssh -NL ${port}:localhost:${port} ${USER}@$(hostname)"
 echo -e "\nLocal URI: http://localhost:${port}"
-source activate $1
-JUPYTER_RUNTIME_DIR="/n/groups/datta/win/.jupyter-runtime" jupyter lab --no-browser --port=${port} --ip="0.0.0.0"
+jupyter lab --no-browser --port=${port} --ip="0.0.0.0"
 
 date

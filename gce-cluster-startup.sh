@@ -44,7 +44,7 @@ echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
 conda install -y -c conda-forge ffmpeg
 
 pip install -U pip
-pip install jupyter
+pip install jupyterlab
 pip install matplotlib
 pip install cython
 
@@ -54,11 +54,11 @@ pip install -e dev/moseq2-model --process-dependency-links
 pip install -e dev/moseq2-batch
 pip install -e dev/moseq2-viz
 
-sudo yum install -y zsh
+sudo yum install -y zsh nodejs
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
 rm $HOME/.zshrc
 ln -s $HOME/init-scripts/gce-zshrc.zsh $HOME/.zshrc
@@ -69,5 +69,21 @@ echo "exec zsh" >> $HOME/.bash_profile
 rm $HOME/miniconda3_latest.sh
 
 gcloud auth login
+
+git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+ln -s $HOME/init-scripts/.vimrc $HOME/.vimrc
+
+# install jupyterlab extensions
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install @jupyterlab/toc
+jupyter labextension install jupyterlab_vim
+jupyter labextension install @jupyterlab/celltags
+jupyter labextension install @oriolmirosa/jupyterlab_materialdarker
+
+jupyterconfig="$HOME/.jupyter/lab/user-settings/@jupyterlab/"
+mkdir -p $jupyterconfig/notebook-extension
+ln -s $HOME/init-scripts/jupyterlab-notebook-settings.json $jupyterconfig/notebook-extension/tracker.jupyterlab-settings
+mkdir -p $jupyterconfig/shortcuts-extension
+ln -s $HOME/init-scripts/jupyterlab-keyboard-shortcuts.json $jupyterconfig/shortcuts-extension/plugin.jupyterlab-settings
 
 . $HOME/.bash_profile
