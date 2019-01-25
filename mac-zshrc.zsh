@@ -104,7 +104,8 @@ chrome="/Applications/Brave\ Browser\ Dev.app/Contents/MacOS/Brave\ Browser\ Dev
 alias db-paper="$chrome --app=\"https://paper.dropbox.com/\""
 alias mouse-sheet="$chrome --app=\"https://docs.google.com/spreadsheets/d/12rA4RhtUTtdAZEwEzsUYY0JSeCwJ5CvlBRnj-B3oAQ4/edit#gid=490203928\""
 alias exp-log="$chrome --app=\"https://docs.google.com/spreadsheets/d/11hMXk72uZEWdZlzjFCiDQVG1dBZuH7zzmCJMrFolZFE/edit#gid=0\""
-alias realtime-log="$chrome -app=\"https://docs.google.com/spreadsheets/d/1j8N2YyXa3Ku8B4Bky-n5nYJvI0WnH0mm3ytFkx30-4s/edit#gid=0\""
+alias realtime-log="$chrome --app=\"https://docs.google.com/spreadsheets/d/1j8N2YyXa3Ku8B4Bky-n5nYJvI0WnH0mm3ytFkx30-4s/edit#gid=0\""
+alias email="$chrome --app=\"https://mail.google.com/mail/u/0/?pli=1#inbox\""
 
 function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
