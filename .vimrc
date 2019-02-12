@@ -8,7 +8,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-
+Plugin 'plasticboy/vim-markdown'
 Plugin 'ajh17/VimCompletesMe'
 Plugin 'xolox/vim-misc'
 Plugin 'junegunn/goyo.vim'
@@ -84,6 +84,7 @@ set history=100
 
 nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
+map <C-l> :Toc<CR>
 
 let filetype_m='matlab'
 autocmd BufNewFile,BufRead *.nf set syntax=groovy
@@ -150,3 +151,6 @@ let &t_SI.="\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
+
+let g:vim_markdown_folding_disabled = 1
+
