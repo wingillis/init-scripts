@@ -8,7 +8,8 @@ hist.bins: 20
 legend.frameon: false
 savefig.facecolor: 212121
 savefig.dpi: 300
-font.family: serif
+font.family: sans-serif
+font.weight: light
 pdf.fonttype: 42
 ps.usedistiller: xpdf
 
