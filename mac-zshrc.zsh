@@ -126,3 +126,7 @@ if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wg
 if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 # export LD_LIBRARY_PATH=/usr/local/lib
+
+  # Set Spaceship ZSH as a prompt
+  autoload -U promptinit; promptinit
+  prompt spaceship
