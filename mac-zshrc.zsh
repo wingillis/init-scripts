@@ -7,7 +7,7 @@ export ZSH=/Users/wgillis/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="spaceship"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -87,7 +87,7 @@ export PATH="$PATH:$HOME/dev/go/bin"
 
 source ~/.bash_profile # this sources mac.sh
 autoload -U promptinit; promptinit
-prompt pure
+prompt spaceship
 
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
@@ -126,7 +126,4 @@ if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wg
 if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 # export LD_LIBRARY_PATH=/usr/local/lib
-
-  # Set Spaceship ZSH as a prompt
-  autoload -U promptinit; promptinit
-  prompt spaceship
+export PATH="/usr/local/opt/ruby/bin:$PATH"
