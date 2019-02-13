@@ -60,7 +60,9 @@ filetype plugin indent on    " required
 " au VimEnter * RainbowParenthesesToggle
 set t_Co=256
 set background=dark
-set termguicolors
+if system('hostname -s') !~ 'datta'
+	set termguicolors
+endif
 colorscheme dracula
 syntax on
 
