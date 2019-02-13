@@ -49,8 +49,6 @@ for suffix in "${seqnames[@]}"; do
 done
 
 sudo yum install -y zsh nodejs
-sudo npm install -g nvm
-nvm install v11.9
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
@@ -69,12 +67,7 @@ gcloud auth login
 git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 ln -s $HOME/init-scripts/.vimrc $HOME/.vimrc
 
-# install jupyterlab extensions
-jupyter labextension install @jupyter-widgets/jupyterlab-manager
-jupyter labextension install @jupyterlab/toc
-jupyter labextension install jupyterlab_vim
-jupyter labextension install @jupyterlab/celltags
-jupyter labextension install @oriolmirosa/jupyterlab_materialdarker
+echo | vim +PluginInstall +qall
 
 jupyterconfig="$HOME/.jupyter/lab/user-settings/@jupyterlab/"
 mkdir -p $jupyterconfig/notebook-extension
@@ -86,3 +79,19 @@ mkdir -p $HOME/.config/matplotlib/stylelib
 ln -s $HOME/init-scripts/dark-settings.yaml $HOME/.config/matplotlib/stylelib/win-dark.mplstyle
 
 . $HOME/.bash_profile
+
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+nvm install v11.9
+npm update -g npm 
+
+# install jupyterlab extensions
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install @jupyterlab/toc
+jupyter labextension install jupyterlab_vim
+jupyter labextension install @jupyterlab/celltags
+jupyter labextension install @oriolmirosa/jupyterlab_materialdarker
+
