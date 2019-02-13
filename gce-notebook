@@ -5,13 +5,14 @@
 #SBATCH -c 16
 #SBATCH -n 1
 #SBATCH --mem=100GB
-#SBATCH --time=2-00:00:00
+#SBATCH --time=5-00:00:00
 
 date;hostname;pwd
 
 unset XDG_RUNTIME_DIR
 
-port=$(shuf -i 20000-30000 -n 1)
+#port=$(shuf -i 20000-30000 -n 1)
+port=232323
 
 echo -e "\nStarting Jupyter labe on port ${port} on the $(hostname) server."
 echo -e "\nSSH tunnel command: ssh -NL ${port}:localhost:${port} ${USER}@$(hostname)"
