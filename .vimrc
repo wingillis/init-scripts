@@ -9,10 +9,12 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'Konfekt/FastFold'
 Plugin 'ajh17/VimCompletesMe'
 Plugin 'xolox/vim-misc'
 Plugin 'junegunn/goyo.vim'
 Plugin 'junegunn/limelight.vim'
+Plugin 'junegunn/fzf.vim'
 Plugin 'grep.vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'flazz/vim-colorschemes'
@@ -30,9 +32,9 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'scrooloose/syntastic'
 " Plugin 'valloric/youcompleteme'
-Plugin 'jvirtanen/vim-octave'
+"Plugin 'jvirtanen/vim-octave'
 " Plugin 'ervandew/supertab'
-Plugin 'neomake/neomake'
+"Plugin 'neomake/neomake'
 Plugin 'majutsushi/tagbar'
 " These are the new colorschemes I like that I should use
 " carbonized-dark
@@ -153,4 +155,7 @@ set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
 
 let g:vim_markdown_folding_disabled = 1
+
+set lazyredraw
+set regexpengine=1
 
