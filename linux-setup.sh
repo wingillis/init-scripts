@@ -1,7 +1,14 @@
 cd $HOME
 
+make_profile () {
+	touch $HOME/.bash_profile
+	echo ". $HOME/.bashrc" >> .bash_profile
+}
+
 mkdir -p dev/moseq2
 moseq_path="${HOME}/dev/moseq2"
+
+command -v curl >/dev/null 2>&1 || sudo apt install curl
 
 # download miniconda
 curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o "$HOME/miniconda3_latest.sh"
@@ -20,14 +27,17 @@ for suffix in "${seqnames[@]}"; do
 done
 
 cd $HOME/dev
+[ -d mouse-rt-classifier ] && rm -rf mouse-rt-classifier
 git clone https://github.com/dattalab/mouse-rt-classifier.git
 
 cd $HOME
 [ -d miniconda3 ] && rm -rf miniconda3
 bash miniconda3_latest.sh -b -p $HOME/miniconda3
 
-echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bashrc
+[ -f .bash_profile ] && make_profile
+echo "export PATH=$HOME/miniconda3/bin:\$PATH" >> .bash_profile
 
+echo "sourcing"
 . $HOME/.bash_profile
 
 # install ffmpeg
@@ -65,7 +75,7 @@ ln -s $HOME/init-scripts/jupyterlab-keyboard-shortcuts.json $jupyterconfig/short
 mkdir -p $HOME/.config/matplotlib/stylelib
 ln -s $HOME/init-scripts/dark-settings.yaml $HOME/.config/matplotlib/stylelib/win-dark.mplstyle
 
-. $HOME/.bash_profile
+. $HOME/.bashrc
 
 ## install jupyterlab extensions
 #jupyter labextension install @jupyter-widgets/jupyterlab-manager
