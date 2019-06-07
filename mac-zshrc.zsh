@@ -129,3 +129,5 @@ export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 
 export {CC,CXX,MPICXX}=/usr/local/bin/gcc-8
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
