@@ -55,7 +55,7 @@ set background=dark
 if system('hostname -s') !~ 'datta'
 	set termguicolors
 endif
-colorscheme dracula
+colorscheme skwull
 syntax on
 
 set tabstop=2
@@ -108,14 +108,14 @@ noremap <silent> <Leader>s :call ToggleScheme()<CR>
 nnoremap <silent> <Leader>pn :call StartPencil()<CR>
 
 function g:ToggleScheme()
-	if g:colors_name == 'Tomorrow'
+	if g:colors_name == 'solarized8_light'
 		"set background=dark
-		colorscheme dracula
+		colorscheme skwull
 		AirlineTheme bubblegum
 	else
 		"set background=light
-		colorscheme Tomorrow
-		AirlineTheme light
+		colorscheme solarized8_light
+		AirlineTheme solarized
 	endif
 endfunction
 
