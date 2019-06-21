@@ -124,8 +124,8 @@ export PATH="$PATH:$GOROOT/bin"
 export MATLABPATH="$HOME/code/matlab"
 export PATH="$PATH:$HOME/miniconda2/bin"
 
-export JUPYTER_RUNTIME_DIR="~/.jupyter-runtime"
-export JUPYTER_CONFIG_DIR="~/.jupyter_config"
+export JUPYTER_RUNTIME_DIR="$HOME/.jupyter-runtime"
+export JUPYTER_CONFIG_DIR="$HOME/.jupyter"
 
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
