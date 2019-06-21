@@ -8,4 +8,5 @@ ln -s $HOME/dev/init-scripts/vim-ft-exts/*.vim $HOME/.vim/ftplugin/
 
 ln -s $HOME/dev/init-scripts/.vimrc $HOME/.vimrc
 
-vim --cmd "PluginInstall" -c "qa"
+echo | vim +PluginInstall +qall
+

@@ -1,50 +1,42 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 " alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'ajh17/VimCompletesMe'
-Plugin 'xolox/vim-misc'
-Plugin 'junegunn/goyo.vim'
-Plugin 'junegunn/limelight.vim'
-Plugin 'grep.vim'
-Plugin 'kien/rainbow_parentheses.vim'
-Plugin 'flazz/vim-colorschemes'
-Plugin 'xolox/vim-session'
-Plugin 'guns/vim-clojure-static'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-fireplace'
-Plugin '907th/vim-auto-save'
-Plugin 'vim-scripts/paredit.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-fugitive'
-Plugin 'reedes/vim-pencil'
-Plugin 'tpope/vim-surround'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'scrooloose/syntastic'
-" Plugin 'valloric/youcompleteme'
-Plugin 'jvirtanen/vim-octave'
-" Plugin 'ervandew/supertab'
-Plugin 'neomake/neomake'
-Plugin 'majutsushi/tagbar'
+Plug 'plasticboy/vim-markdown'
+Plug 'xolox/vim-misc'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+"Plug 'grep.vim'
+Plug 'kien/rainbow_parentheses.vim', { 'for': 'clojure' }
+Plug 'flazz/vim-colorschemes'
+Plug 'xolox/vim-session'
+Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-fireplace'
+Plug '907th/vim-auto-save'
+Plug 'vim-scripts/paredit.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'reedes/vim-pencil'
+Plug 'tpope/vim-surround'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'jvirtanen/vim-octave'
+Plug 'majutsushi/tagbar'
 " These are the new colorschemes I like that I should use
 " carbonized-dark
-Plugin 'nightsense/carbonized'
-Plugin 'beigebrucewayne/skull-vim'
-Plugin 'hauleth/blame.vim'
+Plug 'nightsense/carbonized'
+Plug 'hauleth/blame.vim'
 " stellarized_dark
-Plugin 'nightsense/stellarized'
-Plugin 'wingillis/skwull-vim'
+Plug 'nightsense/stellarized'
+Plug 'wingillis/skwull-vim'
+
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()            " required
+
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
@@ -60,8 +52,10 @@ filetype plugin indent on    " required
 " au VimEnter * RainbowParenthesesToggle
 set t_Co=256
 set background=dark
-set termguicolors
-colorscheme dracula
+if system('hostname -s') !~ 'datta'
+	set termguicolors
+endif
+colorscheme skwull
 syntax on
 
 set tabstop=2
@@ -114,14 +108,14 @@ noremap <silent> <Leader>s :call ToggleScheme()<CR>
 nnoremap <silent> <Leader>pn :call StartPencil()<CR>
 
 function g:ToggleScheme()
-	if g:colors_name == 'Tomorrow'
+	if g:colors_name == 'solarized8_light'
 		"set background=dark
-		colorscheme dracula
+		colorscheme skwull
 		AirlineTheme bubblegum
 	else
 		"set background=light
-		colorscheme Tomorrow
-		AirlineTheme light
+		colorscheme solarized8_light
+		AirlineTheme solarized
 	endif
 endfunction
 
@@ -145,7 +139,7 @@ autocmd VimEnter * :AirlineRefresh
 set hidden
 
 " add a line containing today's date to the text 
-nnoremap <silent> <Leader>dt "=strftime("## %A, %B %d, %Y\n")<CR>P
+nnoremap <silent> <Leader>dt "=strftime("\n## %A, %B %d, %Y\n")<CR>p
 
 let &t_SI.="\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
@@ -153,4 +147,33 @@ set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
 
 let g:vim_markdown_folding_disabled = 1
+
+" some coc definitions
+set signcolumn=yes
+set shortmess+=c
+set updatetime=300
+set cmdheight=2
+
+nmap <silent> gd <Plug>(coc-definition)
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space()
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+" jump between diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
