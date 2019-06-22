@@ -124,8 +124,8 @@ export PATH="$PATH:$GOROOT/bin"
 export MATLABPATH="$HOME/code/matlab"
 export PATH="$PATH:$HOME/miniconda2/bin"
 
-export JUPYTER_RUNTIME_DIR="~/.jupyter-runtime"
-export JUPYTER_CONFIG_DIR="~/.jupyter_config"
+export JUPYTER_RUNTIME_DIR="$HOME/.jupyter-runtime"
+export JUPYTER_CONFIG_DIR="$HOME/.jupyter"
 
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
@@ -152,4 +152,22 @@ if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/ho
 
 export NXF_WORK='/n/scratch2/wg41/nextflow'
 export NXF_HOME='$HOME/.nextflow'
+
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/wg41/miniconda2/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/wg41/miniconda2/etc/profile.d/conda.sh" ]; then
+        . "/home/wg41/miniconda2/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/wg41/miniconda2/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
