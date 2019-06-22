@@ -2,6 +2,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 call plug#begin('~/.vim/plugged')
+Plug 'posva/vim-vue'
 Plug 'plasticboy/vim-markdown'
 Plug 'xolox/vim-misc'
 Plug 'junegunn/goyo.vim'
