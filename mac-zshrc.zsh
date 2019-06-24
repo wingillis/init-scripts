@@ -129,3 +129,6 @@ export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 
 export {CC,CXX,MPICXX}=/usr/local/bin/gcc-8
+
+alias notes="vim ~/db-hms/notable/notes"
+
