@@ -1,4 +1,11 @@
 {
+    // Keyboard Shortcuts
+    // @jupyterlab/shortcuts-extension:plugin
+    // Keyboard shortcut settings for JupyterLab.
+    // ******************************************
+
+    // [missing schema title]
+    // [missing schema description]
     "apputils:activate-command-palette": {
       "command": "apputils:activate-command-palette",
       "keys": [
@@ -8,6 +15,39 @@
       "title": "Activate Command Palette",
       "category": "Main Area"
     },
+
+    // [missing schema title]
+    // [missing schema description]
+    "console:linebreak": {
+      "command": "console:linebreak",
+      "keys": [
+        "Ctrl Enter"
+      ],
+      "selector": ".jp-CodeConsole-promptCell"
+    },
+
+    // [missing schema title]
+    // [missing schema description]
+    "console:run-forced": {
+      "command": "console:run-forced",
+      "keys": [
+        "Shift Enter"
+      ],
+      "selector": ".jp-CodeConsole-promptCell"
+    },
+
+    // [missing schema title]
+    // [missing schema description]
+    "console:run-unforced": {
+      "command": "console:run-unforced",
+      "keys": [
+        "Enter"
+      ],
+      "selector": ".jp-CodeConsole-promptCell"
+    },
+
+    // [missing schema title]
+    // [missing schema description]
     "filemenu:close-and-cleanup": {
       "command": "filemenu:close-and-cleanup",
       "keys": [
@@ -16,5 +56,15 @@
       "selector": ".jp-Activity",
       "title": "Close And shutdown Notebook",
       "category": "File Operations"
+    },
+        
+    "terminal:create-new": {
+        "command": "terminal:create-new",
+        "keys": [
+            "Ctrl Shift T"
+        ],
+        "selector": ".jp-Activity",
+        "title": "Open New Terminal",
+        "category": "Other"
     }
 }

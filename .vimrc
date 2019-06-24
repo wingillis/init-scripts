@@ -2,12 +2,11 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 call plug#begin('~/.vim/plugged')
-" alternatively, pass a path where Vundle should install plugins
+Plug 'posva/vim-vue'
 Plug 'plasticboy/vim-markdown'
 Plug 'xolox/vim-misc'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
-"Plug 'grep.vim'
 Plug 'kien/rainbow_parentheses.vim', { 'for': 'clojure' }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-session'
@@ -22,7 +21,7 @@ Plug 'reedes/vim-pencil'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'jvirtanen/vim-octave'
+Plug 'jvirtanen/vim-octave', { 'for': 'matlab' }
 Plug 'majutsushi/tagbar'
 " These are the new colorschemes I like that I should use
 " carbonized-dark
@@ -38,18 +37,7 @@ Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()            " required
 
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-" au VimEnter * RainbowParenthesesToggle
+
 set t_Co=256
 set background=dark
 if system('hostname -s') !~ 'datta'
@@ -74,7 +62,6 @@ set linebreak
 set nolist
 set laststatus=2
 set history=100
-
 
 nnoremap ; :
 map <C-n> :NERDTreeToggle<CR>
@@ -109,11 +96,9 @@ nnoremap <silent> <Leader>pn :call StartPencil()<CR>
 
 function g:ToggleScheme()
 	if g:colors_name == 'solarized8_light'
-		"set background=dark
 		colorscheme skwull
 		AirlineTheme bubblegum
 	else
-		"set background=light
 		colorscheme solarized8_light
 		AirlineTheme solarized
 	endif
@@ -147,6 +132,9 @@ set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
 
 let g:vim_markdown_folding_disabled = 1
+
+set lazyredraw
+set regexpengine=1
 
 " some coc definitions
 set signcolumn=yes
