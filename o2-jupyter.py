@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import re
 import subprocess
 from fabric import Connection
@@ -9,14 +10,12 @@ sq_cmd = f'squeue --user={username} --name=jupyter'
 
 c = Connection(f'{username}@o2.hms.harvard.edu')
 res = c.run(sq_cmd)
-
 out = res.stdout
 
 o2 = subprocess.run(f"echo '{out}' | tail -n +3 | awk '{{print $1}}'",
                     shell=True,
                     stdout=subprocess.PIPE)
 
-print(o2.stdout.decode('utf-8'))
 choices = o2.stdout.decode('utf-8').split()
 cli = Bullet(
     prompt='Which jupyter node do you want to connect to?',
