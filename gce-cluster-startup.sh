@@ -116,6 +116,7 @@ jupyter labextension install @jupyterlab/toc --no-build
 jupyter labextension install jupyterlab_vim --no-build
 jupyter labextension install @jupyterlab/celltags --no-build
 jupyter labextension install @oriolmirosa/jupyterlab_materialdarker --no-build
+jupyter labextension install @pyviz/jupyterlab_pyviz --no-build
 jupyter lab build
 
 
