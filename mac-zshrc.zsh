@@ -127,3 +127,8 @@ if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Us
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 # export LD_LIBRARY_PATH=/usr/local/lib
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+export {CC,CXX,MPICXX}=/usr/local/bin/gcc-8
+
+alias notes="vim ~/db-hms/notable/notes"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
