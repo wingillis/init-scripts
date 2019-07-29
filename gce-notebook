@@ -7,12 +7,15 @@
 #SBATCH --mem=100GB
 #SBATCH --time=5-00:00:00
 
+
+sudo yum install -y zsh htop
+
 date;hostname;pwd
 
 unset XDG_RUNTIME_DIR
 
 #port=$(shuf -i 20000-30000 -n 1)
-port=232323
+port=12323
 
 echo -e "\nStarting Jupyter labe on port ${port} on the $(hostname) server."
 echo -e "\nSSH tunnel command: ssh -NL ${port}:localhost:${port} ${USER}@$(hostname)"
