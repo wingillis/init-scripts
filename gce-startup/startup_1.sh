@@ -35,11 +35,17 @@ bash miniconda3_latest.sh -b -p $HOME/miniconda3
 
 rm $HOME/miniconda3_latest.sh
 
-rm $HOME/.zshrc
+if [ -f $HOME/.zshrc ]; then
+    rm $HOME/.zshrc
+fi
 ln -s $HOME/init-scripts/gce-zshrc.zsh $HOME/.zshrc
-rm $HOME/.tmux.conf
+if [ -f $HOME/.tmux.conf ]; then
+    rm $HOME/.tmux.conf
+fi
 ln -s $HOME/init-scripts/.tmux.conf $HOME/.tmux.conf
-rm $HOME/.vimrc
+if [ -f $HOME/.vimrc ]; then
+    rm $HOME/.vimrc
+fi
 ln -s $HOME/init-scripts/.vimrc $HOME/.vimrc
 
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

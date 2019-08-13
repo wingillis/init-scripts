@@ -1,5 +1,7 @@
 PATH=$HOME/miniconda3/bin:$PATH
 
+declare -a seqnames=("extract" "pca" "model" "batch" "viz")
+
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
 export NVM_DIR="$HOME/.nvm"
@@ -30,15 +32,14 @@ jupyterconfig="$HOME/.jupyter/lab/user-settings/@jupyterlab/"
 
 mkdir -p $jupyterconfig/notebook-extension
 mkdir -p $jupyterconfig/shortcuts-extension
+mkdir -p $HOME/.config/matplotlib/stylelib
 
-rm $jupyterconfig/notebook-extension/tracker.jupyerlab-settings
-rm $jupyterconfig/shortcuts-extension/plugin.jupyterlab-settings
+if [ -f $jupyterconfig/notebook-extension/tracker.jupyerlab-settings ]; then
+    rm $jupyterconfig/notebook-extension/tracker.jupyerlab-settings
+    rm $jupyterconfig/shortcuts-extension/plugin.jupyterlab-settings
+    rm $HOME/.config/matplotlib/stylelib/win-dark.mplstyle
+fi
 
 ln -s $HOME/init-scripts/jupyterlab-notebook-settings.json $jupyterconfig/notebook-extension/tracker.jupyterlab-settings
 ln -s $HOME/init-scripts/jupyterlab-keyboard-shortcuts.json $jupyterconfig/shortcuts-extension/plugin.jupyterlab-settings
-
-mkdir -p $HOME/.config/matplotlib/stylelib
-
-rm $HOME/.config/matplotlib/stylelib/win-dark.mplstyle
-
 ln -s $HOME/init-scripts/dark-settings.yaml $HOME/.config/matplotlib/stylelib/win-dark.mplstyle
