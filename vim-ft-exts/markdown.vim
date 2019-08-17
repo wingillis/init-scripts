@@ -33,3 +33,6 @@ nnoremap <silent> = :execute "normal \<plug>(goyo-resize)"<cr>
 " autosave my notes only if they are markdown
 let g:auto_save = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
+
+set autoread
+au CursorHold * checktime
