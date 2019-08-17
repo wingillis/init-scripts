@@ -15,11 +15,11 @@ then
   export pybirds="/Users/wgillis/Documents/MATLAB/birds/py"
 fi
 
-if [[ $(uname) = "Darwin" ]]; then
-	alias matlab="/Applications/MATLAB_R2018a.app/bin/matlab"
-	. /Users/wgillis/*conda*/etc/profile.d/conda.sh
-	# alias matlab="/Applications/MATLAB_R201[9876][ab].app/bin/matlab"
-fi
+#if [[ $(uname) = "Darwin" ]]; then
+	#alias matlab="/Applications/MATLAB_R2018a.app/bin/matlab"
+	#. /Users/wgillis/*conda*/etc/profile.d/conda.sh
+	## alias matlab="/Applications/MATLAB_R201[9876][ab].app/bin/matlab"
+#fi
 export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
 alias matterm="matlab -nodisplay -nodesktop -nosplash"
 
@@ -36,7 +36,6 @@ function cl {
 }
 
 alias matgraph="matlab -nodesktop -nosplash"
-alias subl='open -a "Sublime Text"'
 alias py3='conda activate py3'
 
 # make bash use vi keybindings
@@ -44,5 +43,3 @@ set -o vi
 
 echo "Welcome Winthrop"
 echo "Vi keybindings now loaded!"
-
-# export PATH="/Users/wgillis/anaconda/bin/:$PATH"

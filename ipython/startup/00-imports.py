@@ -11,5 +11,6 @@ import os
 from tqdm import tqdm_notebook
 from pathlib import Path
 from dls_analysis.viz.util import saver_factory, fg, subplots
+from os.path import join, dirname, basename
 
 plt.style.use(['dark_background', 'win-dark'])
