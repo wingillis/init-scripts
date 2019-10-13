@@ -4,7 +4,7 @@ verbose=""
 node=""
 x11=""
 forward=""
-login="login"
+login="o2"
 user="wg41"
 port="8989"
 
@@ -12,7 +12,8 @@ if ! [ -z $ECOMMONS_ID ]; then
 	user=$ECOMMONS_ID
 	echo "using defined ecommons id"
 fi
-harvard="rc.hms.harvard.edu"
+
+harvard="hms.harvard.edu"
 shell="zsh"
 comm=""
 

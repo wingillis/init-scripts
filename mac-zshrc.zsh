@@ -2,12 +2,12 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/wgillis/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="spaceship"
+ZSH_THEME="avit"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -81,13 +81,10 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
+#
+export PATH="$PATH:$HOME/dev/init-scripts"
 
-export PATH="$PATH:/Users/wgillis/dev/init-scripts:/Users/wgillis/bin"
-export PATH="$PATH:$HOME/dev/go/bin"
-
-source ~/.bash_profile # this sources mac.sh
-autoload -U promptinit; promptinit
-prompt spaceship
+# source ~/.bash_profile # this sources mac.sh
 
 bindkey "^[[A" history-substring-search-up
 bindkey "^[[B" history-substring-search-down
@@ -96,16 +93,15 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5 # how long to wait after key press from switching to command mode (50 ms)
-export GOPATH="${HOME}/dev/go"
 
 alias curcommit="git rev-parse HEAD | cut -c1-7"
 alias copycommit="curcommit | pbcopy"
-chrome="/Applications/Brave\ Browser\ Dev.app/Contents/MacOS/Brave\ Browser\ Dev"
-alias db-paper="$chrome --app=\"https://paper.dropbox.com/\""
-alias mouse-sheet="$chrome --app=\"https://docs.google.com/spreadsheets/d/12rA4RhtUTtdAZEwEzsUYY0JSeCwJ5CvlBRnj-B3oAQ4/edit#gid=490203928\""
-alias exp-log="$chrome --app=\"https://docs.google.com/spreadsheets/d/11hMXk72uZEWdZlzjFCiDQVG1dBZuH7zzmCJMrFolZFE/edit#gid=0\""
-alias realtime-log="$chrome --app=\"https://docs.google.com/spreadsheets/d/1j8N2YyXa3Ku8B4Bky-n5nYJvI0WnH0mm3ytFkx30-4s/edit#gid=0\""
-alias email="$chrome --app=\"https://mail.google.com/mail/u/0/?pli=1#inbox\""
+browser="/Applications/Safari.app/Contents/MacOS/Safari"
+browser_cmd="open -a $browser"
+alias mouse-sheet="$browser_cmd \"https://docs.google.com/spreadsheets/d/12rA4RhtUTtdAZEwEzsUYY0JSeCwJ5CvlBRnj-B3oAQ4/edit#gid=490203928\""
+alias exp-log="$browser_cmd \"https://docs.google.com/spreadsheets/d/11hMXk72uZEWdZlzjFCiDQVG1dBZuH7zzmCJMrFolZFE/edit#gid=0\""
+alias realtime-log="$browser_cmd \"https://docs.google.com/spreadsheets/d/1j8N2YyXa3Ku8B4Bky-n5nYJvI0WnH0mm3ytFkx30-4s/edit#gid=0\""
+alias email="$browser_cmd \"https://mail.google.com/mail/u/0/?pli=1#inbox\""
 
 function commit_diff {
 	git --no-pager diff --stat ${1}^1 ${1}
@@ -118,17 +114,29 @@ ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=white,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
+alias notes="vim $HOME/db-hms/notable/notes"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/wgillis/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then . '/Applications/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/wgillis/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/wgillis/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH="/usr/local/opt/node@8/bin:$PATH"
-# export LD_LIBRARY_PATH=/usr/local/lib
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-
-export {CC,CXX,MPICXX}=/usr/local/bin/gcc-8
-
-alias notes="vim ~/db-hms/notable/notes"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then . '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
