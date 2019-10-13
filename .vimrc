@@ -43,7 +43,8 @@ set background=dark
 if system('hostname -s') !~ 'datta'
 	set termguicolors
 endif
-colorscheme skwull
+"colorscheme skwull
+colorscheme solarized8_light
 syntax on
 
 set tabstop=2
@@ -74,7 +75,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
+let g:airline_theme='solarized'
 
 let g:syntastic_disabled_filetypes=['py']
 
