@@ -1,4 +1,8 @@
 " my configuration for markdown file editing
+"
+autocmd! VimLeave * silent !echo -ne "\033]1337;SetColors=curbg=000\a"
+autocmd! VimLeave * silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
+
 SoftPencil
 
 if &columns < 90
@@ -11,10 +15,14 @@ end
 
 function! s:goyo_leave()
 	" Quit out of the buffer that goyo then opens
+	silent !echo -ne "\033]1337;SetColors=curbg=000\a"
+	silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
 	q
 	" shouldn't quit out of other open buffers
 endfunction
 
+autocmd! User GoyoLeave * silent !echo -ne "\033]1337;SetColors=curbg=000\a"
+autocmd! User GoyoLeave * silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
 autocmd! User GoyoLeave call <SID>goyo_leave()
 
 function NtToggle()
@@ -36,3 +44,4 @@ let g:auto_save_events = ["InsertLeave", "TextChanged"]
 
 set autoread
 au CursorHold * checktime
+

@@ -9,8 +9,7 @@ import numpy as np
 # utils
 import os
 import joblib
-from tqdm import tqdm_notebook
-from pathlib import Path
+from tqdm.auto import tqdm
 from os.path import join, basename, dirname
 from dls_analysis.viz.util import saver_factory, fg, subplots
 

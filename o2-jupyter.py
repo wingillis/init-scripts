@@ -34,7 +34,7 @@ out = res.stdout.split('\n')[1]
 
 match = re.search(r'\d+:', out).group()
 
-subprocess.run(f'open http://localhost:{match[:-1]}/lab', shell=True)
+subprocess.run(f'open -a Firefox http://localhost:{match[:-1]}/lab', shell=True)
 subprocess.run(out, shell=True)
 
 

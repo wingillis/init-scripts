@@ -43,8 +43,8 @@ set background=dark
 if system('hostname -s') !~ 'datta'
 	set termguicolors
 endif
-"colorscheme skwull
-colorscheme solarized8_light
+colorscheme skwull
+"colorscheme solarized8_light
 syntax on
 
 set tabstop=2
@@ -75,7 +75,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme='solarized'
+let g:airline_theme='bubblegum'
 
 let g:syntastic_disabled_filetypes=['py']
 
@@ -99,9 +99,23 @@ function g:ToggleScheme()
 	if g:colors_name == 'solarized8_light'
 		colorscheme skwull
 		AirlineTheme bubblegum
+		let &t_SI = "\<Esc>]1337;SetColors=curbg=fff\x7"
+		let &t_SI .= "\<Esc>]1337;SetColors=curfg=000\x7"
+		let &t_SI .="\<Esc>]50;CursorShape=1\x7"
+		let &t_EI = "\<Esc>]1337;SetColors=curbg=fff\x7"
+		let &t_EI .= "\<Esc>]1337;SetColors=curfg=000\x7"
+		let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
+		normal i
 	else
 		colorscheme solarized8_light
 		AirlineTheme solarized
+		let &t_SI = "\<Esc>]1337;SetColors=curbg=000\x7"
+		let &t_SI .= "\<Esc>]1337;SetColors=curbg=fff\x7"
+		let &t_SI .="\<Esc>]50;CursorShape=1\x7"
+		let &t_EI = "\<Esc>]1337;SetColors=curbg=000\x7"
+		let &t_EI .= "\<Esc>]1337;SetColors=curbg=fff\x7"
+		let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
+		normal i
 	endif
 endfunction
 
@@ -127,8 +141,19 @@ set hidden
 " add a line containing today's date to the text 
 nnoremap <silent> <Leader>dt "=strftime("\n## %A, %B %d, %Y\n")<CR>p
 
-let &t_SI.="\<Esc>]50;CursorShape=1\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if g:colors_name == 'skwull'
+	let &t_SI = "\<Esc>]1337;SetColors=curbg=fff\x7"
+	let &t_SI .= "\<Esc>]1337;SetColors=curfg=000\x7"
+	let &t_SI .="\<Esc>]50;CursorShape=1\x7"
+	let &t_EI = "\<Esc>]1337;SetColors=curbg=fff\x7"
+	let &t_EI .= "\<Esc>]1337;SetColors=curfg=000\x7"
+	let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
+	normal i
+endif
+
+
+let &t_SI .="\<Esc>]50;CursorShape=1\x7"
+let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
 set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
 
@@ -166,3 +191,5 @@ endfunction
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
+autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curbg=000\a"
+autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
