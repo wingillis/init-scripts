@@ -7,7 +7,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="cypher"
+ZSH_THEME="bira"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -114,7 +114,7 @@ ZSH_HIGHLIGHT_STYLES[builtin]='fg=green'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=blue,fg=white,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
-alias notes="vim $HOME/db-hms/notable/notes"
+alias notes="vim $HOME/db-hms/notable/notes -s <(printf '3jcd')"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -143,3 +143,6 @@ if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then . '/Applicat
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
+
+export NOTES="$HOME/db-hms/notable"

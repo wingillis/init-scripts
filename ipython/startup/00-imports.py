@@ -13,4 +13,4 @@ from tqdm.auto import tqdm
 from os.path import join, basename, dirname
 from dls_analysis.viz.util import saver_factory, fg, subplots
 
-plt.style.use(['dark_background', 'win-dark'])
+# plt.style.use(['dark_background', 'win-dark'])

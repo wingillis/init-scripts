@@ -39,11 +39,11 @@ call plug#end()            " required
 filetype plugin indent on    " required
 
 set t_Co=256
-set background=dark
+set background=light
 if system('hostname -s') !~ 'datta'
 	set termguicolors
 endif
-colorscheme skwull
+colorscheme Tomorrow
 "colorscheme solarized8_light
 syntax on
 
@@ -75,7 +75,7 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme='bubblegum'
+let g:airline_theme='papercolor'
 
 let g:syntastic_disabled_filetypes=['py']
 
@@ -107,7 +107,7 @@ function g:ToggleScheme()
 		let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
 		normal i
 	else
-		colorscheme solarized8_light
+		colorscheme Tomorrow
 		AirlineTheme solarized
 		let &t_SI = "\<Esc>]1337;SetColors=curbg=000\x7"
 		let &t_SI .= "\<Esc>]1337;SetColors=curbg=fff\x7"
@@ -139,7 +139,7 @@ autocmd VimEnter * :AirlineRefresh
 set hidden
 
 " add a line containing today's date to the text 
-nnoremap <silent> <Leader>dt "=strftime("\n## %A, %B %d, %Y\n")<CR>p
+nnoremap <silent> <Leader>dt "=strftime("## %A, %B %d, %Y  [[daily-notes]]\n\n\n")<CR>p
 
 if g:colors_name == 'skwull'
 	let &t_SI = "\<Esc>]1337;SetColors=curbg=fff\x7"
@@ -191,5 +191,5 @@ endfunction
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curbg=000\a"
-autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
+"autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curbg=000\a"
+"autocmd VimLeave * silent !echo -ne "\033]1337;SetColors=curfg=fff\a"
