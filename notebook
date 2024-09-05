@@ -2,10 +2,10 @@
 #SBATCH --job-name=jupyter
 #SBATCH --output=jupyter_%j.log
 #SBATCH --partition=priority
-#SBATCH -c 10
+#SBATCH -c 2
 #SBATCH -n 1
 #SBATCH --mem=100GB
-#SBATCH --time=3-00:00:00
+#SBATCH --time=5-00:00:00
 date;hostname;pwd
 
 unset XDG_RUNTIME_DIR
@@ -16,6 +16,6 @@ echo -e "\nStarting Jupyter labe on port ${port} on the $(hostname) server."
 echo -e "\nSSH tunnel command: ssh -NL ${port}:localhost:${port} ${USER}@$(hostname)"
 echo -e "\nLocal URI: http://localhost:${port}"
 # source activate $1
-jupyter lab --no-browser --port=${port} --ip="0.0.0.0"
+SHELL=/usr/bin/zsh jupyter lab --no-browser --port=${port} --ip="0.0.0.0"
 
 date

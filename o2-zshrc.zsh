@@ -15,7 +15,7 @@ export ZSH=/home/wg41/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="cloud"
+ZSH_THEME="bira"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -61,6 +61,7 @@ ZSH_THEME="cloud"
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git vi-mode zsh-autosuggestions)
 plugins=(git vi-mode history-substring-search zsh-syntax-highlighting)
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 
 source $ZSH/oh-my-zsh.sh
 
@@ -72,7 +73,7 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -89,9 +90,6 @@ export EDITOR='vim'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export neurobio='/files/Neurobio/DattaLab/win'
-export code='/home/wg41/code'
-export inscopix='/n/groups/datta/win/inscopix'
 export PATH="$PATH:/home/wg41/code/bash"
 export PATH="/home/wg41/code/bash/bin:$PATH"
 export PATH="$PATH:/home/wg41/code/"
@@ -99,30 +97,30 @@ export PATH="$PATH:/home/wg41/code/batch-jobs"
 export PATH="/home/wg41/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/lib:$HOME/code/bash/lib"
 
-module load matlab/2017b
+# module load matlab/2017b
 module load git/2.9.5
 
 alias tmux="TERM=screen-256color tmux"
-alias matterm="matlab -nodesktop -nodisplay -nosplash"
+# alias matterm="matlab -nodesktop -nodisplay -nosplash"
 alias ta='tmux a -t win'
 alias tn='tmux new -s win'
-export neurobio='/files/Neurobio/DattaLab/win'
-export code='/home/wg41/code'
-export inscopix='/n/groups/datta/win/inscopix'
+# export neurobio='/files/Neurobio/DattaLab/win'
+# export code='/home/wg41/code'
+# export inscopix='/n/groups/datta/win/inscopix'
 alias wq="squeue -u wg41"
-alias wql="wq -o \"%.18i %.18j %.2t %.10M\""
+# alias wql="wq -o \"%.18i %.18j %.2t %.10M\""
+alias transfer-login="ssh wg41@transfer -t 'zsh -i'"
 
-export jworkspace="/n/groups/datta/Jeff/workspace/"
-export grin="/n/groups/datta/win/1pimaging_dls_moseq2"
-export PATH="$PATH:/home/wg41/code/kinect-extraction/bash/"
+# export jworkspace="/n/groups/datta/Jeff/workspace/"
+# export grin="/n/groups/datta/win/1pimaging_dls_moseq2"
+# export PATH="$PATH:/home/wg41/code/kinect-extraction/bash/"
 
 export GOPATH=$HOME/code/go
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=$HOME/bin/go/go
 export PATH="$PATH:$GOROOT/bin"
 
-export MATLABPATH="$HOME/code/matlab"
-export PATH="$PATH:$HOME/miniconda2/bin"
+# export MATLABPATH="$HOME/code/matlab"
 
 export JUPYTER_RUNTIME_DIR="$HOME/.jupyter-runtime"
 export JUPYTER_CONFIG_DIR="$HOME/.jupyter"
@@ -132,9 +130,9 @@ bindkey "^[[B" history-substring-search-down
 bindkey -M vicmd "k" history-substring-search-up
 bindkey -M vicmd "j" history-substring-search-down
 export KEYTIMEOUT=5
-alias mo2="source activate mo2"
-alias py3="source activate py3"
 alias fairshare="sshare -u $USER -U"
+alias scratch="cd /n/scratch/users/w/wg41"
+export SCRATCH="/n/scratch/users/w/wg41"
 
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
@@ -143,6 +141,7 @@ ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=cyan,fg=white,bold'
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
 
+export CLOUDSDK_CONFIG=/n/groups/datta/win/.gcloud-config
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/path.zsh.inc'; fi
@@ -150,28 +149,35 @@ if [ -f '/home/wg41/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/home/wg4
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/home/wg41/bin/google-cloud-sdk/completion.zsh.inc'; fi
 
-export NXF_WORK='/n/scratch2/wg41/nextflow'
-export NXF_HOME='$HOME/.nextflow'
+export NXF_WORK='/n/scratch/users/w/wg41/nextflow'
+export NXF_HOME="${HOME}/.nextflow"
 
 export MKL_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-#__conda_setup="$('/home/wg41/miniconda2/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+#__conda_setup="$('/home/wg41/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 #if [ $? -eq 0 ]; then
-    #eval "$__conda_setup"
+		#eval "$__conda_setup"
 #else
-    #if [ -f "/home/wg41/miniconda2/etc/profile.d/conda.sh" ]; then
-        #. "/home/wg41/miniconda2/etc/profile.d/conda.sh"
-    #else
-        #export PATH="/home/wg41/miniconda2/bin:$PATH"
-    #fi
+		#if [ -f "/home/wg41/miniconda3/etc/profile.d/conda.sh" ]; then
+				#. "/home/wg41/miniconda3/etc/profile.d/conda.sh"
+		#else
+				#export PATH="/home/wg41/miniconda3/bin:$PATH"
+		#fi
 #fi
 #unset __conda_setup
+
+#if [ -f "/home/wg41/miniconda3/etc/profile.d/mamba.sh" ]; then
+    #. "/home/wg41/miniconda3/etc/profile.d/mamba.sh"
+#fi
 # <<< conda initialize <<<
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export MODIN_ENGINE=dask
 
+export PATH="$PATH:$HOME/julia-1.7.2/bin"
+# . $HOME/comet-keys.sh

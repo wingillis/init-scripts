@@ -10,7 +10,7 @@ Plug 'junegunn/limelight.vim'
 Plug 'kien/rainbow_parentheses.vim', { 'for': 'clojure' }
 Plug 'flazz/vim-colorschemes'
 Plug 'xolox/vim-session'
-Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
+" Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fireplace'
 Plug '907th/vim-auto-save'
@@ -21,7 +21,7 @@ Plug 'reedes/vim-pencil'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'jvirtanen/vim-octave', { 'for': 'matlab' }
+" Plug 'jvirtanen/vim-octave', { 'for': 'matlab' }
 Plug 'majutsushi/tagbar'
 " These are the new colorschemes I like that I should use
 " carbonized-dark
@@ -31,7 +31,7 @@ Plug 'hauleth/blame.vim'
 Plug 'nightsense/stellarized'
 Plug 'wingillis/skwull-vim'
 
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -43,7 +43,7 @@ set background=dark
 if system('hostname -s') !~ 'datta'
 	set termguicolors
 endif
-colorscheme skwull
+colorscheme Monokai
 syntax on
 
 set tabstop=2
@@ -126,10 +126,16 @@ set hidden
 " add a line containing today's date to the text 
 nnoremap <silent> <Leader>dt "=strftime("\n## %A, %B %d, %Y\n")<CR>p
 
-let &t_SI.="\<Esc>]50;CursorShape=1\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+"let &t_SI .= "\<Esc>]50;CursorShape=1\x7"
+"let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
 set timeoutlen=1000 ttimeoutlen=10
 set backspace=indent,eol,start
+highlight Cursor guifg=black guibg=white
+highlight iCursor guifg=black guibg=orange
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait15
 
 let g:vim_markdown_folding_disabled = 1
 
@@ -142,26 +148,26 @@ set shortmess+=c
 set updatetime=300
 set cmdheight=2
 
-nmap <silent> gd <Plug>(coc-definition)
-inoremap <silent><expr> <c-space> coc#refresh()
+"nmap <silent> gd <Plug>(coc-definition)
+"inoremap <silent><expr> <c-space> coc#refresh()
 " Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"inoremap <silent><expr> <TAB>
+      "\ pumvisible() ? "\<C-n>" :
+      "\ <SID>check_back_space() ? "\<TAB>" :
+      "\ coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space()
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+"function! s:check_back_space()
+  "let col = col('.') - 1
+  "return !col || getline('.')[col - 1]  =~ '\s'
+"endfunction
 
 " jump between diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+"nmap <silent> [c <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]c <Plug>(coc-diagnostic-next)
 

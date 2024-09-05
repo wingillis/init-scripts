@@ -20,14 +20,14 @@ fi
 	#. /Users/wgillis/*conda*/etc/profile.d/conda.sh
 	## alias matlab="/Applications/MATLAB_R201[9876][ab].app/bin/matlab"
 #fi
-export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
-alias matterm="matlab -nodisplay -nodesktop -nosplash"
+# export work="wgillis@cumm024-0b02-dhcp-180.bu.edu"
+# alias matterm="matlab -nodisplay -nodesktop -nosplash"
 
 #orchestraServer="${user}@transfer.orchestra.med.harvard.edu"
-export o2server="${user}@transfer.rc.hms.harvard.edu"
-alias mountgroup2="sshfs ${o2server}:/n/groups/datta/ $HOME/groups/"
-alias mounto2="sshfs ${o2server}:/home/wg41/ $HOME/neuro/"
-alias fumount="umount -f"
+#export o2server="${user}@transfer.rc.hms.harvard.edu"
+# alias mountgroup2="sshfs ${o2server}:/n/groups/datta/ $HOME/groups/"
+#alias mounto2="sshfs ${o2server}:/home/wg41/ $HOME/neuro/"
+# alias fumount="umount -f"
 
 function cl {
   cd $1
@@ -35,8 +35,8 @@ function cl {
   ls -la .
 }
 
-alias matgraph="matlab -nodesktop -nosplash"
-alias py3='conda activate py3'
+# alias matgraph="matlab -nodesktop -nosplash"
+# alias py3='conda activate py3'
 
 # make bash use vi keybindings
 set -o vi
