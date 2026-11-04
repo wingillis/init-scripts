@@ -7,6 +7,12 @@ require("typst")
 rex.mode("resize", { exclusive = true })
 rex.bind("cmd+shift+r", "client.mode.enter", { name = "resize" })
 
+-- Vim-style pane navigation
+rex.bind("cmd+alt+h", "pane.focus.left")
+rex.bind("cmd+alt+j", "pane.focus.down")
+rex.bind("cmd+alt+k", "pane.focus.up")
+rex.bind("cmd+alt+l", "pane.focus.right")
+
 rex.bind("resize/left", "pane.resize", { direction = "left" })
 rex.bind("resize/right", "pane.resize", { direction = "right" })
 rex.bind("resize/up", "pane.resize", { direction = "up" })

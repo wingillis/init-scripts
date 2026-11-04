@@ -78,7 +78,7 @@ ZSH_THEME="bira"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vi-mode history-substring-search zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git vi-mode history-substring-search macos zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,7 +98,13 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR='nvim'
 
 # Escape key delay (units: 1/100 sec; 10 = 100ms)
-KEYTIMEOUT=10
+KEYTIMEOUT=5
+
+# History substring search keybindings
+bindkey "^[[A" history-substring-search-up
+bindkey "^[[B" history-substring-search-down
+bindkey -M vicmd "k" history-substring-search-up
+bindkey -M vicmd "j" history-substring-search-down
 
 # Vi mode cursor shape configuration
 function zle-keymap-select {
@@ -152,3 +158,20 @@ eval "$(atuin init zsh --disable-up-arrow)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+
+# Private environment variables (API keys etc.) - not tracked in git
+[ -f "$HOME/.secrets" ] && . "$HOME/.secrets"
+
+export LLAMA_BASE_URL="http://deep-learner:1234/v1"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# pnpm
+export PNPM_HOME="${HOME}/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
