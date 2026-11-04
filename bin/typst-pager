@@ -1,0 +1,966 @@
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.9"
+# dependencies = []
+# ///
+"""typst-pager - page through a Typst document inside a Rex terminal block.
+
+Compiles the source to PNG pages with `typst compile`, then draws the current
+page with the Kitty graphics protocol. Watches the source tree and recompiles
+on save, keeping the page you were reading.
+
+With no document, or one directory, it opens a picker: type to filter, type a
+path with a slash to browse elsewhere, tab or enter to open.
+
+  picker:  type to filter   up/down move   tab complete   enter open
+           esc clear
+  viewer:  j / n / space / down   next page    g  first page
+           k / p / up             prev page    G  last page
+           o  pick another        r  recompile  q  quit
+
+Pages are rendered at a resolution matched to the pane, because the terminal's
+image store counts decoded pixels, not PNG size.
+"""
+
+import base64
+import fcntl
+import json
+import os
+import select
+import shutil
+import signal
+import struct
+import subprocess
+import sys
+import tempfile
+import termios
+import time
+import tty
+from pathlib import Path
+
+ST = "\x1b\\"
+CHUNK = 4096              # base64 characters per APC sequence
+SUPERSAMPLE = 1.5         # image pixels per pane pixel
+PER_IMAGE_PIXELS = 1_750_000  # about 7 MB decoded, under Rex's image store cap
+IMAGE_BUDGET = 8_000_000  # budget for decoded pixels kept in the terminal
+DEFAULT_PPI = 150
+PROBE_PPI = 24
+PICK_LIMIT = 3000
+SKIP_DIRS = {".git", ".jj", "node_modules", "target", ".venv", "venv", "__pycache__"}
+
+
+# ---------------------------------------------------------------- terminal
+
+def cell_size():
+    """(cols, rows) from the pty. TIOCGWINSZ gives rows first."""
+    try:
+        rows, cols = struct.unpack(
+            "HHHH", fcntl.ioctl(0, termios.TIOCGWINSZ, b"\x00" * 8)
+        )[:2]
+        return cols, rows
+    except Exception:
+        return None
+
+
+def pane_geometry():
+    """(cols, rows, cell_w_px, cell_h_px) for the pane this runs in."""
+    fallback = cell_size() or (80, 24)
+    try:
+        out = subprocess.run(
+            ["rex", "block", "call", "size"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if out.returncode == 0:
+            d = json.loads(out.stdout)
+            cols, rows = int(d["columns"]), int(d["rows"])
+            cw, ch = int(d.get("cell_width_px") or 0), int(d.get("cell_height_px") or 0)
+            if cols > 0 and rows > 0 and cw > 0 and ch > 0:
+                return cols, rows, cw, ch
+    except Exception:
+        pass
+    cols, rows = fallback
+    return cols, rows, 8, 16
+
+
+def png_size(path):
+    with open(path, "rb") as f:
+        head = f.read(24)
+    if len(head) < 24 or head[:8] != b"\x89PNG\r\n\x1a\n":
+        return 0, 0
+    return struct.unpack(">II", head[16:24])
+
+
+def find_program(name):
+    """Absolute path to a program, falling back to where things usually live.
+
+    Blocks started through the API inherit the server's bare PATH, which has
+    neither ~/.local/bin nor ~/.cargo/bin in it.
+    """
+    found = shutil.which(name)
+    if found:
+        return found
+    home = Path.home()
+    for directory in (
+        home / ".cargo/bin",
+        home / ".local/bin",
+        home / "bin",
+        Path("/opt/homebrew/bin"),
+        Path("/usr/local/bin"),
+        Path("/usr/bin"),
+        Path("/bin"),
+    ):
+        candidate = directory / name
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return str(candidate)
+    return name
+
+
+def strip_replies(data):
+    """Drop APC/OSC answers the terminal may write to our input."""
+    out = bytearray()
+    i = 0
+    while i < len(data):
+        if data[i:i + 2] in (b"\x1b_", b"\x1b]"):
+            end = data.find(ST.encode(), i + 2)
+            if end == -1:
+                bell = data.find(b"\x07", i + 2)
+                if bell == -1:
+                    break
+                i = bell + 1
+                continue
+            i = end + 2
+            continue
+        out.append(data[i])
+        i += 1
+    return bytes(out)
+
+
+SEQUENCE_KEYS = {
+    b"A": "up", b"B": "down", b"C": "right", b"D": "left",
+    b"H": "home", b"F": "end", b"Z": "tab",
+}
+
+
+def parse_keys(data):
+    """Split raw input into named keys and printable characters."""
+    keys = []
+    i, n = 0, len(data)
+    while i < n:
+        b = data[i]
+        if b == 0x1B:
+            if data[i + 1:i + 2] in (b"[", b"O"):
+                j = i + 2
+                while j < n and not 0x40 <= data[j] <= 0x7E:
+                    j += 1
+                keys.append(SEQUENCE_KEYS.get(data[j:j + 1], "unknown"))
+                i = j + 1
+                continue
+            keys.append("esc")
+            i += 1
+            continue
+        if b in (0x0D, 0x0A):
+            keys.append("enter")
+        elif b == 0x09:
+            keys.append("tab")
+        elif b in (0x7F, 0x08):
+            keys.append("backspace")
+        elif b == 0x03:
+            keys.append("interrupt")
+        elif b == 0x04:
+            keys.append("eof")
+        elif b == 0x15:
+            keys.append("clear")
+        elif b == 0x0E:
+            keys.append("down")
+        elif b == 0x10:
+            keys.append("up")
+        elif 32 <= b < 127:
+            keys.append("char " + chr(b))
+        i += 1
+    return keys
+
+
+# ---------------------------------------------------------------- kitty
+
+def kitty_transmit(fd, image_id, data):
+    b = base64.b64encode(data)
+    first = True
+    for i in range(0, len(b), CHUNK):
+        payload = b[i:i + CHUNK]
+        more = 1 if i + CHUNK < len(b) else 0
+        if first:
+            ctl = f"i={image_id},f=100,a=t,t=d,q=2,m={more}"
+            first = False
+        else:
+            ctl = f"m={more}"
+        os.write(fd, b"\x1b_G" + ctl.encode() + b";" + payload + ST.encode())
+
+
+def kitty_place(fd, image_id, cols, rows):
+    os.write(
+        fd,
+        f"\x1b_Gi={image_id},a=p,p=1,c={cols},r={rows},C=1,q=2;".encode() + ST.encode(),
+    )
+
+
+def kitty_delete_image(fd, image_id):
+    os.write(fd, f"\x1b_Ga=d,d=i,i={image_id},q=2;".encode() + ST.encode())
+
+
+def kitty_delete_placements(fd):
+    os.write(fd, b"\x1b_Ga=d,d=a,q=2;" + ST.encode())
+
+
+def kitty_delete_all(fd):
+    os.write(fd, b"\x1b_Ga=d,d=A,q=2;" + ST.encode())
+
+
+# ---------------------------------------------------------------- document
+
+class Document:
+    def __init__(self, source, ppi=None):
+        self.source = source
+        self.root = source.parent
+        self.typst = find_program("typst")
+        self.tmp = Path(tempfile.mkdtemp(prefix="typst-pager-"))
+        self.fixed_ppi = ppi           # None means fit the resolution to the pane
+        self.ppi = ppi or DEFAULT_PPI
+        self.page_pt = None            # (width, height) of a page in Typst points
+        self.pages = []
+        self.error = None
+        self.page = 0
+        self.cache = {}                # page index -> (image id, decoded bytes)
+        self.order = []                # image ids, least recently used first
+        self.generation = 0
+        self.compiled_at = None
+
+    def close(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    # -- compiling
+
+    def probe(self):
+        """Learn the page's size in points from one tiny first-page render."""
+        if self.page_pt:
+            return
+        out = self.tmp / "probe.png"
+        cmd = [
+            self.typst, "compile", "--format", "png", "--ppi", str(PROBE_PPI),
+            "--pages", "1", "--root", str(self.root), str(self.source), str(out),
+        ]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True)
+        except FileNotFoundError:
+            return
+        if proc.returncode != 0 or not out.exists():
+            return
+        width, height = png_size(out)
+        if width and height:
+            self.page_pt = (width * 72.0 / PROBE_PPI, height * 72.0 / PROBE_PPI)
+        try:
+            out.unlink()
+        except OSError:
+            pass
+
+    def ppi_for(self, pane_px_width):
+        """Resolution for this pane, capped so one page fits the image store."""
+        if self.fixed_ppi:
+            return self.fixed_ppi
+        if not self.page_pt:
+            return DEFAULT_PPI
+        w_pt, h_pt = self.page_pt
+        want = pane_px_width * SUPERSAMPLE * 72.0 / w_pt
+        cap = (PER_IMAGE_PIXELS * 72.0 * 72.0 / (w_pt * h_pt)) ** 0.5
+        return int(max(72, min(240, round(min(want, cap)))))
+
+    def compile(self):
+        for old in self.tmp.glob("page-*.png"):
+            try:
+                old.unlink()
+            except OSError:
+                pass
+        cmd = [
+            self.typst, "compile",
+            "--format", "png",
+            "--ppi", str(self.ppi),
+            "--root", str(self.root),
+            str(self.source),
+            str(self.tmp / "page-{p}.png"),
+        ]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True)
+        except FileNotFoundError:
+            self.pages, self.error = [], ["typst: not found"]
+            return False
+
+        pages = sorted(self.tmp.glob("page-*.png"), key=lambda p: int(p.stem.split("-")[1]))
+        if proc.returncode != 0 or not pages:
+            self.pages = []
+            self.error = self.readable_errors(proc.stderr)
+            self.cache.clear()
+            self.order.clear()
+            return False
+
+        if not self.page_pt:
+            width, height = png_size(pages[0])
+            if width and height:
+                self.page_pt = (width * 72.0 / self.ppi, height * 72.0 / self.ppi)
+
+        self.pages = pages
+        self.error = None
+        self.generation += 1
+        self.cache.clear()
+        self.order.clear()
+        self.compiled_at = time.strftime("%H:%M:%S")
+        self.page = min(self.page, len(pages) - 1)
+        return True
+
+    def recompile_for_width(self, pane_px_width):
+        """Re-render at a resolution that suits the pane, if it is worth it."""
+        want = self.ppi_for(pane_px_width)
+        if abs(want - self.ppi) <= max(10, 0.2 * self.ppi):
+            return False
+        self.ppi = want
+        return self.compile()
+
+    @staticmethod
+    def readable_errors(stderr):
+        lines = [ln.rstrip() for ln in stderr.splitlines() if ln.strip()]
+        start = 0
+        for i, ln in enumerate(lines):
+            if ln.lstrip().startswith("error:"):
+                start = i
+                break
+        return (lines[start:] or ["typst compile failed"])[:40]
+
+    # -- watching
+
+    def stamp(self):
+        try:
+            latest = self.source.stat().st_mtime
+        except OSError:
+            return 0.0
+        seen = 0
+        for dirpath, dirnames, filenames in os.walk(self.root):
+            dirnames[:] = [
+                d for d in dirnames if d not in SKIP_DIRS and not d.startswith(".")
+            ]
+            for name in filenames:
+                if not name.endswith(".typ"):
+                    continue
+                try:
+                    latest = max(latest, os.stat(os.path.join(dirpath, name)).st_mtime)
+                except OSError:
+                    pass
+                seen += 1
+                if seen > 2000:
+                    return latest
+        return latest
+
+
+# ---------------------------------------------------------------- picker
+
+def cache_path():
+    base = os.environ.get("XDG_CACHE_HOME") or os.path.join(Path.home(), ".cache")
+    return os.path.join(base, "typst-pager", "last.json")
+
+
+def last_pick(directory):
+    try:
+        with open(cache_path(), encoding="utf-8") as f:
+            return json.load(f).get(directory)
+    except Exception:
+        return None
+
+
+def remember_pick(directory, path):
+    try:
+        target = Path(cache_path())
+        target.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with open(target, encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+        data[directory] = path
+        tmp = target.with_suffix(".tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(data, f)
+        tmp.replace(target)
+    except Exception:
+        pass
+
+
+def scan_typ(root):
+    """Every .typ file under root, breadth-first and bounded."""
+    found, started = [], time.time()
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = sorted(
+            d for d in dirnames if d not in SKIP_DIRS and not d.startswith(".")
+        )
+        for name in sorted(filenames):
+            if name.endswith(".typ"):
+                found.append(os.path.join(dirpath, name))
+                if len(found) >= PICK_LIMIT:
+                    return found
+        if time.time() - started > 1.5:
+            break
+    return found
+
+
+class Picker:
+    def __init__(self, start, geom, preselect=None):
+        self.start = start
+        self.geom = geom
+        self.query = ""
+        self.selected = 0
+        self.scroll = 0
+        self.entries = []          # (display, path, is_dir)
+        self.files = scan_typ(start)
+        self.preselect = preselect
+        self.refresh()
+
+    # -- candidates
+
+    def refresh(self):
+        query = self.query
+        self.entries = []
+        if "/" in query or query.startswith("~"):
+            expanded = os.path.expanduser(query)
+            base, prefix = os.path.split(expanded)
+            base = base or "."
+            try:
+                names = sorted(os.listdir(base))
+            except OSError:
+                names = []
+            needle = prefix.lower()
+            for name in names:
+                if name.startswith(".") or not name.lower().startswith(needle):
+                    continue
+                full = os.path.join(base, name)
+                shown = os.path.join(base, name) + "/" if os.path.isdir(full) else full
+                if os.path.isdir(full) or name.endswith(".typ"):
+                    self.entries.append((shown, full + "/" if os.path.isdir(full) else full,
+                                         os.path.isdir(full)))
+            self.entries.sort(key=lambda e: (not e[2], e[0]))
+        else:
+            needle = query.lower()
+            matches = []
+            for path in self.files:
+                shown = os.path.relpath(path, self.start)
+                if needle in shown.lower():
+                    matches.append((shown, path, False))
+            matches.sort(key=lambda e: (not os.path.basename(e[0]).lower().startswith(needle), e[0]))
+            self.entries = matches
+
+        self.selected = 0
+        self.scroll = 0
+        if not query and self.preselect:
+            for i, (_, path, is_dir) in enumerate(self.entries):
+                if not is_dir and os.path.abspath(path) == os.path.abspath(self.preselect):
+                    self.selected = i
+                    break
+
+    def move(self, delta):
+        if not self.entries:
+            return
+        self.selected = max(0, min(self.selected + delta, len(self.entries) - 1))
+
+    def complete(self):
+        if not self.entries:
+            return
+        _, path, is_dir = self.entries[self.selected]
+        self.query = path if is_dir else path
+        self.refresh()
+
+    def activate(self):
+        """Return (path, None) to open a file, or (None, None) if nothing fits."""
+        if self.entries:
+            _, path, is_dir = self.entries[self.selected]
+            if is_dir:
+                self.query = path
+                self.refresh()
+                return None, "dir"
+            return path, None
+        typed = os.path.expanduser(self.query)
+        if typed.endswith(".typ") and os.path.isfile(typed):
+            return typed, None
+        return None, None
+
+    # -- drawing
+
+    def layout(self):
+        cols, rows, _, _ = self.geom
+        list_rows = max(1, rows - 6)
+        if self.selected < self.scroll:
+            self.scroll = self.selected
+        elif self.selected >= self.scroll + list_rows:
+            self.scroll = self.selected - list_rows + 1
+
+        out = ["\x1b[?25h", "\x1b[H", "\x1b[2J"]
+        head = f" Typst documents in {self.start} "
+        out.append(f"\x1b[0m\x1b[7m{' ' * cols}")
+        out.append(f"\x1b[1;1H{head[:cols]}")
+        out.append("\x1b[0m")
+
+        visible = self.entries[self.scroll:self.scroll + list_rows]
+        for i, (shown, _, is_dir) in enumerate(visible):
+            row = 3 + i
+            index = self.scroll + i
+            text = ("  " + shown)[: cols - 1]
+            if index == self.selected:
+                out.append(f"\x1b[{row};1H\x1b[0m\x1b[7m{text:<{cols - 1}}")
+            elif is_dir:
+                out.append(f"\x1b[{row};1H\x1b[0m\x1b[34m{text}")
+            else:
+                out.append(f"\x1b[{row};1H\x1b[0m{text}")
+        if not self.entries:
+            out.append(f"\x1b[3;1H\x1b[0m\x1b[2m  no matches")
+
+        input_row = rows - 2
+        out.append(f"\x1b[{input_row - 1};1H\x1b[0m\x1b[2m{'─' * cols}")
+        prompt = "open: " + self.query
+        out.append(f"\x1b[{input_row};1H\x1b[0m{prompt[: cols - 1]}")
+        count = len(self.entries)
+        status = f"{count} match{'es' if count != 1 else ''}"
+        out.append(f"\x1b[{rows};1H\x1b[0m\x1b[2m type to filter · ↑↓ move · tab complete · enter open · esc clear ")
+        out.append(f"\x1b[{rows};{max(1, cols - len(status))}H\x1b[0m\x1b[2m{status}")
+        out.append(f"\x1b[{input_row};{min(cols, len(prompt) + 1)}H")
+        return "".join(out)
+
+    # -- input
+
+    def handle(self, keys):
+        """Return a path to open, or None to keep picking; "cancel" to quit."""
+        for key in keys:
+            if key in ("interrupt", "eof"):
+                return "cancel"
+            if key == "esc":
+                if self.query:
+                    self.query = ""
+                    self.refresh()
+                else:
+                    return "cancel"
+            elif key == "enter":
+                path, what = self.activate()
+                if path:
+                    return path
+                if what is None and self.query:
+                    return "cancel"
+            elif key == "tab":
+                self.complete()
+            elif key == "up":
+                self.move(-1)
+            elif key == "down":
+                self.move(1)
+            elif key == "home":
+                self.selected = 0
+            elif key == "end":
+                self.selected = max(0, len(self.entries) - 1)
+            elif key == "backspace":
+                if self.query:
+                    self.query = self.query[:-1]
+                    self.refresh()
+            elif key == "clear":
+                self.query = ""
+                self.refresh()
+            elif key.startswith("char "):
+                self.query += key[5:]
+                self.refresh()
+        return None
+
+
+# ---------------------------------------------------------------- viewer
+
+class Pager:
+    def __init__(self, start, document, pick, ppi=None, page=0, watch=True):
+        self.start = start
+        self.doc = document
+        self.pick = pick
+        self.ppi = ppi
+        self.first_page = page
+        self.watch = watch
+        self.fd_in = 0
+        self.fd_out = 1
+        self.saved_attrs = None
+        self.geom = pane_geometry()
+        self.stamp = document.stamp() if document else 0.0
+        self.dirty = True
+        self.next_watch = 0.0
+        self.next_ppi = 0.0
+        self.cleared = False
+        self.picker = None
+
+    # -- lifecycle
+
+    def enter(self):
+        self.saved_attrs = termios.tcgetattr(self.fd_in)
+        tty.setraw(self.fd_in)
+        attrs = termios.tcgetattr(self.fd_in)
+        attrs[6][termios.VMIN] = 0
+        attrs[6][termios.VTIME] = 0
+        termios.tcsetattr(self.fd_in, termios.TCSADRAIN, attrs)
+        os.write(self.fd_out, b"\x1b[?1049h\x1b[?25l\x1b[2J\x1b[H")
+        signal.signal(signal.SIGWINCH, self.on_winch)
+
+    def leave(self):
+        kitty_delete_all(self.fd_out)
+        os.write(self.fd_out, b"\x1b[?25h\x1b[?1049l")
+        if self.saved_attrs is not None:
+            termios.tcsetattr(self.fd_in, termios.TCSADRAIN, self.saved_attrs)
+
+    def on_winch(self, *_):
+        self.refresh_geometry()
+
+    # -- geometry
+
+    def refresh_geometry(self):
+        """Pick up a pane resize: new cell size, new page resolution.
+
+        Cell counts come from the pty, which knows the real size right away;
+        only the pixel size of a cell has to come from Rex.
+        """
+        geo = pane_geometry()
+        cells = cell_size() or (geo[0], geo[1])
+        self.geom = (cells[0], cells[1], geo[2], geo[3])
+        self.dirty = True
+        self.next_ppi = 0.0
+        if self.picker:
+            self.picker.geom = self.geom
+
+    def poll_geometry(self):
+        cells = cell_size()
+        if cells and (cells[0], cells[1]) != (self.geom[0], self.geom[1]):
+            self.refresh_geometry()
+
+    # -- images
+
+    def image_for(self, index):
+        """Image id for a page, transmitting its PNG the first time it is used."""
+        doc = self.doc
+        hit = doc.cache.get(index)
+        if hit is not None:
+            image_id = hit[0]
+            if image_id in doc.order:
+                doc.order.remove(image_id)
+            doc.order.append(image_id)
+            return image_id
+
+        image_id = doc.generation * 1000 + index + 1
+        path = doc.pages[index]
+        data = path.read_bytes()
+        kitty_transmit(self.fd_out, image_id, data)
+        width, height = png_size(path)
+        doc.cache[index] = (image_id, max(1, width * height * 4))
+        doc.order.append(image_id)
+        self.evict()
+        return image_id
+
+    def evict(self):
+        doc = self.doc
+        while len(doc.order) > 1:
+            if sum(n for _, n in doc.cache.values()) <= IMAGE_BUDGET:
+                return
+            victim = doc.order.pop(0)
+            for index, (image_id, _) in list(doc.cache.items()):
+                if image_id == victim:
+                    kitty_delete_image(self.fd_out, image_id)
+                    del doc.cache[index]
+                    break
+
+    # -- documents
+
+    def open(self, path):
+        if self.doc:
+            self.doc.close()
+        self.doc = Document(Path(path).resolve(), self.ppi)
+        self.doc.page = self.first_page
+        self.first_page = 0
+        self.doc.probe()
+        self.doc.ppi = self.doc.ppi_for(self.geom[0] * self.geom[2])
+        self.doc.compile()
+        self.stamp = self.doc.stamp()
+        self.cleared = False
+        self.dirty = True
+        remember_pick(self.start, str(self.doc.source))
+        rename_block(self.doc.source.name)
+
+    # -- drawing
+
+    def status_text(self):
+        doc = self.doc
+        cols = self.geom[0]
+        if doc.error:
+            state = "compile error"
+        elif not doc.pages:
+            state = "compiling"
+        else:
+            state = doc.compiled_at or ""
+        hint = "j/k pages · o open · r reload · q quit"
+        left = f" {doc.source.name} "
+        if doc.pages:
+            left += f" {doc.page + 1}/{len(doc.pages)} "
+        for candidate in (hint, "j/k · o · r · q", "j/k"):
+            if cols - len(left) - len(candidate) - len(state) - 2 >= 2:
+                hint = candidate
+                break
+        gap = cols - len(left) - len(hint) - len(state) - 2
+        if gap < 2:
+            line = left + state
+        else:
+            line = left + hint + " " * gap + state + " "
+        return line[: max(0, cols)]
+
+    def render(self):
+        if self.picker:
+            os.write(self.fd_out, self.picker.layout().encode())
+            self.dirty = False
+            return
+
+        cols, rows, cw, ch = self.geom
+        doc = self.doc
+        footer = 1 + (min(len(doc.error), max(1, rows // 3)) if doc.error else 0)
+        avail = max(1, rows - footer)
+
+        os.write(self.fd_out, b"\x1b[?25l\x1b[H\x1b[2J")
+        kitty_delete_placements(self.fd_out)
+
+        if not doc.pages and not self.cleared:
+            kitty_delete_all(self.fd_out)
+            doc.cache.clear()
+            doc.order.clear()
+            self.cleared = True
+        elif doc.pages:
+            self.cleared = False
+
+        placed = 0
+        if doc.pages:
+            index = max(0, min(doc.page, len(doc.pages) - 1))
+            width, height = png_size(doc.pages[index])
+            if width and height:
+                aspect = (width / cw) / (height / ch)
+                fit_cols = cols
+                fit_rows = max(1, round(fit_cols / aspect))
+                if fit_rows > avail:
+                    fit_rows = avail
+                    fit_cols = max(1, round(fit_rows * aspect))
+                kitty_place(self.fd_out, self.image_for(index), fit_cols, fit_rows)
+                placed = fit_rows
+
+        top = rows - footer + 1 if doc.error else min(rows, placed + 1)
+        out = [f"\x1b[{top};1H\x1b[0m\x1b[7m{self.status_text():<{cols}}"]
+        if doc.error:
+            width = max(10, cols - 2)
+            for i, line in enumerate(doc.error[: footer - 1]):
+                out.append(f"\x1b[{top + 1 + i};1H\x1b[0m\x1b[2m\x1b[31m {line.strip()[:width]}")
+        out.append("\x1b[0m")
+        os.write(self.fd_out, "".join(out).encode())
+        self.dirty = False
+
+    # -- input
+
+    def pick_loop(self):
+        """Run the picker until a document is chosen or the user backs out."""
+        self.picker = Picker(self.start, self.geom,
+                             preselect=last_pick(self.start))
+        self.dirty = True
+        chosen = None
+        while self.picker is not None:
+            if self.dirty:
+                self.render()
+            ready, _, _ = select.select([self.fd_in], [], [], 0.2)
+            if ready:
+                action = self.picker.handle(parse_keys(strip_replies(os.read(self.fd_in, 8192))))
+                if action == "cancel":
+                    self.picker = None
+                    return None
+                if action:
+                    chosen = action
+                    self.picker = None
+                    break
+                self.dirty = True
+            if self.poll_geometry() and self.picker:
+                self.picker.geom = self.geom
+        return chosen
+
+    def handle(self, keys):
+        for key in keys:
+            if key in ("interrupt", "eof"):
+                return "quit"
+            if key in ("char q", "char Q", "esc"):
+                return "quit"
+            if key in ("char j", "char n", "char ", "enter", "down"):
+                self.page_step(1)
+            elif key in ("char k", "char p", "up"):
+                self.page_step(-1)
+            elif key in ("char g", "home"):
+                self.doc.page = 0
+                self.dirty = True
+            elif key in ("char G", "end"):
+                self.doc.page = max(0, len(self.doc.pages) - 1)
+                self.dirty = True
+            elif key == "char r":
+                self.reload(force=True)
+            elif key == "char o":
+                return "pick"
+        return None
+
+    def page_step(self, delta):
+        doc = self.doc
+        if not doc.pages:
+            return
+        doc.page = max(0, min(doc.page + delta, len(doc.pages) - 1))
+        self.dirty = True
+
+    # -- reload
+
+    def reload(self, force=False):
+        current = self.doc.stamp()
+        if not force and current == self.stamp:
+            return
+        self.stamp = current
+        deadline = time.time() + 1.0
+        while time.time() < deadline:
+            time.sleep(0.12)
+            again = self.doc.stamp()
+            if again == self.stamp:
+                break
+            self.stamp = again
+        self.doc.compile()
+        self.dirty = True
+
+    def check_source(self):
+        now = time.time()
+        if not self.watch or now < self.next_watch:
+            return
+        self.next_watch = now + 0.35
+        if self.doc.stamp() != self.stamp:
+            self.reload()
+
+    def check_resolution(self):
+        now = time.time()
+        if not self.doc.pages or now < self.next_ppi:
+            return
+        self.next_ppi = now + 0.6
+        if self.doc.recompile_for_width(self.geom[0] * self.geom[2]):
+            self.dirty = True
+
+    def view_loop(self):
+        while True:
+            if self.dirty:
+                self.render()
+            ready, _, _ = select.select([self.fd_in], [], [], 0.2)
+            if ready:
+                action = self.handle(parse_keys(strip_replies(os.read(self.fd_in, 8192))))
+                if action == "quit":
+                    return
+                if action == "pick":
+                    chosen = self.pick_loop()
+                    if chosen:
+                        self.open(chosen)
+            self.poll_geometry()
+            self.check_resolution()
+            self.check_source()
+
+    def run(self):
+        if self.pick:
+            chosen = self.pick_loop()
+            if not chosen:
+                return
+            self.open(chosen)
+        if self.doc is None:
+            return
+        self.view_loop()
+
+
+# ---------------------------------------------------------------- main
+
+def rename_block(name):
+    """Label the pane after the document, when running inside Rex."""
+    if not os.environ.get("REX_BLOCK"):
+        return
+    try:
+        subprocess.run([find_program("rex"), "block", "rename", name],
+                       capture_output=True, timeout=5)
+    except Exception:
+        pass
+
+
+def report(source, doc):
+    print(source)
+    print(f"pages: {len(doc.pages)}")
+    print(f"ppi: {doc.ppi}")
+    if doc.error:
+        print("\n".join(doc.error))
+
+
+def main(argv):
+    args = list(argv[1:])
+    ppi = None
+    page = 0
+    watch = True
+    pick = False
+    while args and args[0].startswith("-"):
+        flag = args.pop(0)
+        if flag == "--ppi" and args:
+            ppi = int(args.pop(0))
+        elif flag == "--page" and args:
+            page = max(0, int(args.pop(0)) - 1)
+        elif flag == "--no-watch":
+            watch = False
+        elif flag == "--pick":
+            pick = True
+        elif flag in ("-h", "--help"):
+            print(__doc__)
+            return 0
+        else:
+            raise SystemExit(f"unknown option: {flag}")
+
+    target = None
+    if args:
+        target = Path(args[0]).expanduser()
+        if not target.is_absolute():
+            target = Path.cwd() / target
+        target = target.resolve()
+        if not target.exists():
+            raise SystemExit(f"no such file or directory: {target}")
+
+    start = target.parent if target and target.is_file() else (target or Path.cwd())
+    source = target if target and target.is_file() else None
+
+    if source is None and not sys.stdin.isatty():
+        print(f"directory: {start}")
+        for path in sorted(scan_typ(str(start))):
+            print(f"  {os.path.relpath(path, start)}")
+        return 0
+
+    if source is None:
+        pick = True
+
+    document = None
+    if source is not None:
+        geom = pane_geometry()
+        document = Document(source, ppi)
+        document.page = page
+        document.probe()
+        document.ppi = document.ppi_for(geom[0] * geom[2])
+        ok = document.compile()
+        if not sys.stdin.isatty():
+            report(source, document)
+            document.close()
+            return 0 if ok else 1
+
+    pager = Pager(start=str(start), document=document, pick=pick, ppi=ppi,
+                  page=page, watch=watch)
+    try:
+        pager.enter()
+        pager.run()
+    finally:
+        pager.leave()
+        if pager.doc:
+            pager.doc.close()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
